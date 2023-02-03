@@ -6,10 +6,11 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -57,7 +58,27 @@ public class DriveSubsystem extends SubsystemBase {
     m_PIDmode = false;
     m_leftPIDController = m_leftMotor.getPIDController();
     m_rightPIDController = m_rightMotor.getPIDController();
-    resetMotors();
+    resetEncoders();
+    //motor settings
+    m_leftMotor.setIdleMode(IdleMode.kBrake);
+    m_rightMotor.setIdleMode(IdleMode.kBrake);
+    m_leftMotor.setInverted(false);
+    m_rightMotor.setInverted(true);
+    m_leftEncoder.setPositionConversionFactor(1.76);
+    m_rightEncoder.setPositionConversionFactor(1.76);
+    //smart motion
+    m_leftPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartMotionSlot);
+
+    m_rightPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartMotionSlot);
+
   }
 
   /**
@@ -73,6 +94,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void cancelPIDMode() {
     m_PIDmode = false;
     resetMotors();
+  }
+
+  public void setSafetyPID(boolean check){
+    m_drive.setSafetyEnabled(check);
   }
 
   public void setPIDMode() {
@@ -130,27 +155,20 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetMotors(){
-    m_leftMotor.restoreFactoryDefaults();
-    m_rightMotor.restoreFactoryDefaults();
+    //m_leftMotor.restoreFactoryDefaults();
+    //m_rightMotor.restoreFactoryDefaults();
     resetEncoders();
     
     //Our Specific settings
-    m_leftMotor.setIdleMode(IdleMode.kBrake);
-    m_rightMotor.setIdleMode(IdleMode.kBrake);
-    m_leftMotor.setInverted(false);
-    m_rightMotor.setInverted(true);
-    m_leftEncoder.setPositionConversionFactor(1);
-    m_rightEncoder.setPositionConversionFactor(1);
-    m_leftEncoder.setPosition(0);
-    m_rightEncoder.setPosition(0);
+   
   }
 
   public double getLeftEncoderInches() {
-    return m_leftEncoder.getPosition() * PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO;
+    return m_leftEncoder.getPosition();// * PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO;
   }
 
   public double getRightEncoderInches() {
-    return m_rightEncoder.getPosition() * PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO;
+    return m_rightEncoder.getPosition();// * PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO;
   }
 
   public double getAverageEncoderDistance() {

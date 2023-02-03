@@ -68,7 +68,7 @@ public class RobotContainer {
     m_chooser.addOption("Obstacle", m_Obstacle);
 
     SmartDashboard.putData(m_chooser);
-
+    SmartDashboard.putData(m_robotDrive);
     SmartDashboard.putNumber("Motor voltage", DriveConstants.kStatic);
     
   }

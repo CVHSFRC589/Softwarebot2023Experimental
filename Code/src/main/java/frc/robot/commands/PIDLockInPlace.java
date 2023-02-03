@@ -22,19 +22,22 @@ public class PIDLockInPlace extends CommandBase {
   @Override
   public void initialize() {
     m_drive.setPIDMode();
+    m_drive.setSafetyPID(false); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.setPositionLeftMotor(0);
-    m_drive.setPositionRightMotor(0);
+    
+    m_drive.setPositionLeftMotor(60);
+    m_drive.setPositionRightMotor(60);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_drive.cancelPIDMode();
+    m_drive.setSafetyPID(true);
   }
 
   // Returns true when the command should end.
