@@ -102,7 +102,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, OIConstants.buttonX.value)
         .onTrue(new DriveDistance(60, 0.25, m_robotDrive));
     new JoystickButton(m_driverController, OIConstants.buttonY.value)
-        .toggleOnTrue(new PIDLockInPlace(m_robotDrive));
+        .toggleOnTrue(new PIDLockInPlace(m_robotDrive,36));
     
   }
 

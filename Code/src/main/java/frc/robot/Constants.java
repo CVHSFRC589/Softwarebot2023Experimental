@@ -22,6 +22,8 @@ public final class Constants {
     public static final int kRightMotorPort = 12;
     // Analog inputs
     public static final int kRangeFinderPort = 0;
+    //pigeon!!!
+    public static final int Pigeon2ID = 60;
 
    }
 
@@ -46,7 +48,7 @@ public final class Constants {
   
   public static final class PIDConstants {
     public static final int smartMotionSlot = 0;
-
+    
     public static final double kP = 0.00025; 
     public static final double kI = 0.000000;
     public static final double kD = 0.0000000;

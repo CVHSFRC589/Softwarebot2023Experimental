@@ -12,9 +12,10 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PIDLockInPlace extends CommandBase {
   /** Creates a new PIDDrive. */
   private DriveSubsystem m_drive;
-
-  public PIDLockInPlace(DriveSubsystem drive) {
+  private double m_distance;
+  public PIDLockInPlace(DriveSubsystem drive, double distance) {
     m_drive = drive;
+    m_distance = distance;
     addRequirements(m_drive);    
   }
 
@@ -29,8 +30,8 @@ public class PIDLockInPlace extends CommandBase {
   @Override
   public void execute() {
     
-    m_drive.setPositionLeftMotor(60);
-    m_drive.setPositionRightMotor(60);
+    m_drive.setPositionLeftMotor(m_distance);
+    m_drive.setPositionRightMotor(m_distance);
   }
 
   // Called once the command ends or is interrupted.

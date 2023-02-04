@@ -20,9 +20,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.PhysicalConstants;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 public class DriveSubsystem extends SubsystemBase {
-  private AHRS navx;
-
+ // private AHRS navx;
   CANSparkMax m_leftMotor;
   CANSparkMax m_rightMotor;
 
@@ -32,7 +32,8 @@ public class DriveSubsystem extends SubsystemBase {
   private RelativeEncoder m_leftEncoder;
   private RelativeEncoder m_rightEncoder;
   private boolean m_PIDmode;
-
+  private static WPI_Pigeon2 m_pigeon2;
+  
   private AnalogInput m_rangeFinder;
   
 
@@ -46,11 +47,14 @@ public class DriveSubsystem extends SubsystemBase {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     //
-    navx = new AHRS(edu.wpi.first.wpilibj.SPI.Port.kMXP);
+  //  navx = new AHRS(edu.wpi.first.wpilibj.SPI.Port.kMXP);
 
     m_leftMotor = new CANSparkMax(DriveConstants.kLeftMotorPort, MotorType.kBrushless);
     m_rightMotor = new CANSparkMax(DriveConstants.kRightMotorPort, MotorType.kBrushless);
     m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+
+    //pigeon
+    m_pigeon2 = new WPI_Pigeon2(DriveConstants.Pigeon2ID);
 
     m_leftEncoder = m_leftMotor.getEncoder();
     m_rightEncoder = m_rightMotor.getEncoder();
@@ -178,11 +182,11 @@ public class DriveSubsystem extends SubsystemBase {
     return (Math.abs(getLeftEncoderInches()) + Math.abs(getRightEncoderInches())) / 2;
   }
   public void reset_gyro(){
-    navx.reset();
+   // navx.reset();
   }
   public double get_current_heading(){
-
-    return navx.getAngle();
+    return 0;
+   // return navx.getAngle();
   } 
 
   /**
@@ -214,11 +218,14 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
       SmartDashboard.putNumber("Encoder Abs Avg", getAbsAverageEncoderDistance());
       SmartDashboard.putNumber("Dist From Wall", getRangeFinderDistance());
-      SmartDashboard.putData(navx);
-      SmartDashboard.putNumber("Navx Pitch",navx.getPitch());
+      //SmartDashboard.putData(navx);
+      //SmartDashboard.putNumber("Navx Pitch",navx.getPitch());
       // SmartDashboard.putNumber("Encoder Abs Avg", getAbsAverageEncoderDistance());
       SmartDashboard.putNumber("Encoder Position", getAverageEncoderDistance());
       SmartDashboard.putNumber("Encoder Ticks", m_leftEncoder.getPosition());//log();
       SmartDashboard.putNumber("Process Variable", processVariable);
+      SmartDashboard.putData(m_pigeon2);
+      SmartDashboard.putNumber("Pigeon Pitch", m_pigeon2.getPitch());
+      SmartDashboard.putNumber("Pigeon Roll", m_pigeon2.getRoll());
     }
 }
