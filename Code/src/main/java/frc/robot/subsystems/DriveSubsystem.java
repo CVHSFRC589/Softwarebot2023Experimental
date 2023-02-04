@@ -183,11 +183,43 @@ public class DriveSubsystem extends SubsystemBase {
   }
   public void reset_gyro(){
    // navx.reset();
+   m_pigeon2.reset();
   }
   public double get_current_heading(){
     return 0;
    // return navx.getAngle();
+  }
+  public double getPitch(){
+    return m_pigeon2.getPitch();
   } 
+
+  public double getRoll(){
+    return m_pigeon2.getRoll();
+  }
+
+  public double rollAdjust(){
+    if(m_pigeon2.getRoll() > 5){
+      return m_pigeon2.getRoll() / 90;
+    }
+    else if(m_pigeon2.getRoll() < -5){
+      return m_pigeon2.getRoll() / 90;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  public double pitchAdjust() {
+    if(m_pigeon2.getPitch() > 5){
+      return m_pigeon2.getPitch() / -90;
+    }
+    else if(m_pigeon2.getPitch() < -5){
+      return m_pigeon2.getPitch() / -90;
+    }
+    else{
+      return 0;
+    }
+  }
 
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more

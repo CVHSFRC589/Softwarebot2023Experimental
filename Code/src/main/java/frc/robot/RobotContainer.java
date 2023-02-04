@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DefaultDrive;
+import frc.robot.commands.DriveAndBalance;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveVoltage;
 import frc.robot.commands.HalveDriveSpeed;
 import frc.robot.commands.PIDLockInPlace;
+import frc.robot.commands.PigeonBalance;
 import frc.robot.commands.QuarterDriveSpeed;
 import frc.robot.commands.TurnDeg;
 import frc.robot.commands.TurnDegGyro;
@@ -95,8 +97,10 @@ public class RobotContainer {
     .onTrue(new DriveVoltage(DriveConstants.kStatic+.1, m_robotDrive));
     new JoystickButton(m_driverController, OIConstants.buttonA.value)
         .onTrue(new TurnDeg(90, .5, m_robotDrive));
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
+        .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .toggleOnTrue(new QuarterDriveSpeed(m_robotDrive));
     new JoystickButton(m_driverController, OIConstants.buttonX.value)

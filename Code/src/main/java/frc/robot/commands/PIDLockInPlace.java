@@ -19,7 +19,7 @@ public class PIDLockInPlace extends CommandBase {
     addRequirements(m_drive);    
   }
 
-  // Called when the command is initially scheduled.
+  // Call\ed when the command is initially scheduled.
   @Override
   public void initialize() {
     m_drive.setPIDMode();
