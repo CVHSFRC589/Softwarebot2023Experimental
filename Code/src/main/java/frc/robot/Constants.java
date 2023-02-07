@@ -47,8 +47,10 @@ public final class Constants {
   }
   
   public static final class PIDConstants {
-    public static final int smartMotionSlot = 0;
-    
+    public static final int defaultSlot = 0;
+    public static final int smartMotionSlot = 1;
+    public static final int smartVelocitySlot = 2;
+
     public static final double kP = 0.00025; 
     public static final double kI = 0.000000;
     public static final double kD = 0.0000000;

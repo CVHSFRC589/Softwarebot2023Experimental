@@ -19,7 +19,7 @@ public class DriveAndBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
     new DriveDistance(distance, .65 ,drive),
-    new PigeonBalance(drive),
+    new PigeonBalanceSmartVelocity(drive),
     new PIDLockInPlace(drive, 0)
     );
   }
