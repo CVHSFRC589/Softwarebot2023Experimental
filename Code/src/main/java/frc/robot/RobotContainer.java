@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ArmMove;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.DriveAndBalance;
 import frc.robot.commands.DriveDistance;
@@ -27,6 +28,7 @@ import frc.robot.commands.TurnDegGyro;
 import frc.robot.commands.Auto_Pattern.ComplexAuto;
 import frc.robot.commands.Auto_Pattern.Obstacle;
 import frc.robot.commands.Auto_Pattern.RealComplexAuto;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -40,6 +42,7 @@ public class RobotContainer {
   UsbCamera camera = CameraServer.startAutomaticCapture();
   // The robot's subsystems
   private DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private ArmSubsystem m_robotArm = new ArmSubsystem();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -96,13 +99,18 @@ public class RobotContainer {
     // .onTrue(new DriveVoltage(SmartDashboard.getNumber("Motor voltage",0), m_robotDrive));
     new JoystickButton(m_driverController, OIConstants.buttonB.value)
     .onTrue(new DriveVoltage(DriveConstants.kStatic+.1, m_robotDrive));
-    new JoystickButton(m_driverController, OIConstants.buttonA.value)
-        .onTrue(new TurnDeg(90, .5, m_robotDrive));
+
+    // new JoystickButton(m_driverController, OIConstants.buttonA.value)
+    //     .onTrue(new TurnDeg(90, .5, m_robotDrive));
+
     // new JoystickButton(m_driverController, Button.kRightBumper.value)
     //     .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
 
     // new JoystickButton(m_driverController, Button.kRightBumper.value)
     //     .toggleOnTrue(new PigeonBalanceSmartVelocity(m_robotDrive));
+
+    new JoystickButton(m_driverController, OIConstants.buttonA.value)
+        .onTrue(new ArmMove(m_robotArm, 50));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));

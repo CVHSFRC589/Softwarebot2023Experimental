@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.PhysicalConstants;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -122,82 +122,82 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setPIDConstants(){
     //PID CONTROLER SMART MOTION CONSTANTS
-    m_leftPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartMotionSlot);
 
-    m_rightPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartMotionSlot);
   //PID CONSTANTS
-    m_leftPIDController.setP(PIDConstants.kP, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setI(PIDConstants.kI, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setD(PIDConstants.kD, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setIZone(PIDConstants.kIz, PIDConstants.smartMotionSlot);
-    m_leftPIDController.setFF(PIDConstants.kFF, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartMotionSlot);
+    m_leftPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartMotionSlot);
 // Spark manual says to do this via the desktop client    m_leftPIDController.setOutputRange(PIDConstants.kMinOutput, PIDConstants.kMaxOutput);
     
     //set PID coefficients for right motor 2
-    m_rightPIDController.setP(PIDConstants.kP, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setI(PIDConstants.kI, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setD(PIDConstants.kD, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setIZone(PIDConstants.kIz, PIDConstants.smartMotionSlot);
-    m_rightPIDController.setFF(PIDConstants.kFF, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartMotionSlot);
+    m_rightPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartMotionSlot);
     //VELOCITY SLOTS
 
  //PID CONTROLER SMART MOTION CONSTANTS
-    m_leftPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartVelocitySlot);
 
-    m_rightPIDController.setSmartMotionMaxVelocity(PIDConstants.maxVel, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionMinOutputVelocity(PIDConstants.minVel, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionMaxAccel(PIDConstants.maxAcc, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionAllowedClosedLoopError(PIDConstants.allowedErr, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, PIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartVelocitySlot);
 
 
-    m_leftPIDController.setP(PIDConstants.kP, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setI(PIDConstants.kI, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setD(PIDConstants.kD, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setIZone(PIDConstants.kIz, PIDConstants.smartVelocitySlot);
-    m_leftPIDController.setFF(PIDConstants.kFF, PIDConstants.smartVelocitySlot);
+    m_leftPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartVelocitySlot);
 // Spark manual says to do this via the desktop client    m_leftPIDController.setOutputRange(PIDConstants.kMinOutput, PIDConstants.kMaxOutput);
     
     //set PID coefficients for right motor 2
-    m_rightPIDController.setP(PIDConstants.kP, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setI(PIDConstants.kI, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setD(PIDConstants.kD, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setIZone(PIDConstants.kIz, PIDConstants.smartVelocitySlot);
-    m_rightPIDController.setFF(PIDConstants.kFF, PIDConstants.smartVelocitySlot);
+    m_rightPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartVelocitySlot);
 
   }
   public void setVelocityLeftMotor(double velocity) {
-    m_leftPIDController.setReference(velocity, CANSparkMax.ControlType.kSmartVelocity, PIDConstants.smartVelocitySlot);
+    m_leftPIDController.setReference(velocity, CANSparkMax.ControlType.kSmartVelocity, DrivePIDConstants.smartVelocitySlot);
     processVariable = pitchAdjustVelocity();
     processVariableLeft = m_leftEncoder.getVelocity();
     
   }
 
   public void setVelocityRightMotor(double velocity) {
-    m_rightPIDController.setReference(velocity, CANSparkMax.ControlType.kSmartVelocity, PIDConstants.smartVelocitySlot);
+    m_rightPIDController.setReference(velocity, CANSparkMax.ControlType.kSmartVelocity, DrivePIDConstants.smartVelocitySlot);
     processVariable = pitchAdjustVelocity();
     processVariableRight = m_rightEncoder.getVelocity();
   }
 
   public void setPositionLeftMotor(double position) {
-    m_leftPIDController.setReference(position, CANSparkMax.ControlType.kSmartMotion, PIDConstants.smartMotionSlot);
+    m_leftPIDController.setReference(position, CANSparkMax.ControlType.kSmartMotion, DrivePIDConstants.smartMotionSlot);
     processVariableLeft = m_leftEncoder.getPosition();
   }
 
   public void setPositionRightMotor(double position) {
-    m_rightPIDController.setReference(position, CANSparkMax.ControlType.kSmartMotion, PIDConstants.smartMotionSlot);
+    m_rightPIDController.setReference(position, CANSparkMax.ControlType.kSmartMotion, DrivePIDConstants.smartMotionSlot);
     processVariableRight = m_rightEncoder.getPosition();
   }
 
