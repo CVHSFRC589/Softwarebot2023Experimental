@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
   public static final class DriveConstants {
     public static final double kStatic = 0.16935;
-    public static final int kArmMotorPort = 50;
+    public static final int kArmMotorPort = 12;
 
     public static final int kLeftMotorPort = 11;//11
-    public static final int kRightMotorPort = 12;
+    public static final int kRightMotorPort = 50;//12;
     // Analog inputs
     public static final int kRangeFinderPort = 0;
     //pigeon!!!
@@ -40,7 +40,7 @@ public final class Constants {
   public static final class PhysicalConstants {
     // Robot Measurement Constants
     public static final int DRIVE_WHEEL_RADIUS = 3;
-    public static final double ARM_GEAR_RATIO = 1.25;
+    public static final double ARM_GEAR_RATIO = 1.76;//10.71;//1.25;
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
 
     public static final double DRIVE_WHEEL_CIRCUM = 2 * Math.PI * DRIVE_WHEEL_RADIUS;
@@ -77,10 +77,17 @@ public final class Constants {
     public static final double kFF = 0;
     public static final double kMaxOutput = 1;
     public static final double kMinOutput = -1;
-    public static final double maxRPM = 200;
-    public static final double maxVel = 17.5;
+    //public static final double maxRPM = 200;
+    public static final double maxVel = 1750;
     public static final double minVel = 0;
-    public static final double maxAcc = 1.6;
+    public static final double maxAcc = 1000;
     public static final double allowedErr = 1;
+    public static final double PIDWrappingMaxInput = 30;
+    public static final double PIDWrappingMinInput = 5;
+  }
+  public static final class ArmPhysicalConstants{
+    public static final double maxArmValue = 30;
+    public static final double minArmValue = 0;
+    
   }
 }
