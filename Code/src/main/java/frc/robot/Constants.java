@@ -39,6 +39,7 @@ public final class Constants {
 
   public static final class PhysicalConstants {
     // Robot Measurement Constants
+    public static final int maxDriveAmps = 35;
     public static final int DRIVE_WHEEL_RADIUS = 3;
     public static final double ARM_GEAR_RATIO = 1.76;//10.71;//1.25;
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
@@ -86,6 +87,7 @@ public final class Constants {
     public static final double PIDWrappingMinInput = 5;
   }
   public static final class ArmPhysicalConstants{
+    public static final int maxArmAmp = 35;
     public static final double maxArmValue = 30;
     public static final double minArmValue = 0;
     

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,11 +18,13 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmMove;
 import frc.robot.commands.ArmSetPosition;
+import frc.robot.commands.CloseGripper;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.DriveAndBalance;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveVoltage;
 import frc.robot.commands.HalveDriveSpeed;
+import frc.robot.commands.OpenGripper;
 import frc.robot.commands.PIDLockInPlace;
 import frc.robot.commands.PigeonBalance;
 import frc.robot.commands.PigeonBalanceSmartVelocity;
@@ -34,6 +37,7 @@ import frc.robot.commands.Auto_Pattern.Obstacle;
 import frc.robot.commands.Auto_Pattern.RealComplexAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -51,6 +55,7 @@ public class RobotContainer {
   // The robot's subsystems
   private DriveSubsystem m_robotDrive = new DriveSubsystem();
   private ArmSubsystem m_robotArm = new ArmSubsystem();
+  private GripperSubsystem m_robotGripper = new GripperSubsystem();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -147,12 +152,18 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, OIConstants.buttonY.value)
         .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));
+    
+    new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
+        .onTrue(new OpenGripper(m_robotGripper));
+    
+    new JoystickButton(m_driverController, Axis.kRightTrigger.value)
+        .onTrue(new CloseGripper(m_robotGripper));
 
     new POVButton(m_driverController, 0)
-    .whileTrue(new ChangeArmPos(.5 , m_robotArm));
+        .whileTrue(new ChangeArmPos(.5 , m_robotArm));
 
     new POVButton(m_driverController, 180)
-    .whileTrue(new ChangeArmPos(-.5 , m_robotArm));
+        .whileTrue(new ChangeArmPos(-.5 , m_robotArm));
   }
 
   /**

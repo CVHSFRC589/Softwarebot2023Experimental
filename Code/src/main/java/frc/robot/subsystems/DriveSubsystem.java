@@ -56,7 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
     m_rightMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
     m_leftMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
-    
+
     //pigeon
     m_pigeon2 = new WPI_Pigeon2(DriveConstants.Pigeon2ID);
 
@@ -88,7 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+    m_drive.arcadeDrive(fwd, rot, true);
   }
 
   public void cancelPIDMode() {

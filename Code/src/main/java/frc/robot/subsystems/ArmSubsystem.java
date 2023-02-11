@@ -44,7 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_clampedPosition = 0;
 
     m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_lowerlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
     // resetEncoders();
     
@@ -130,7 +130,8 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
-     
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Upper limit Switch", m_upperlimitswitch.isPressed());
+    SmartDashboard.putBoolean("Lower limit Switch", m_lowerlimitswitch.isPressed());
+    // This method will be called on      ce per scheduler run
   }
 }
