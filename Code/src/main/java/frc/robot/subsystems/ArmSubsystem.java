@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
@@ -23,6 +27,8 @@ import frc.robot.Constants.PhysicalConstants;
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
   private SparkMaxPIDController m_PIDController;
+  private SparkMaxLimitSwitch m_upperlimitswitch;
+  private SparkMaxLimitSwitch m_lowerlimitswitch;
   private RelativeEncoder m_encoder;
   private double m_clampedPosition;
   private double m_currentPosition;
@@ -31,10 +37,14 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     m_motor = new CANSparkMax(DriveConstants.kArmMotorPort, MotorType.kBrushless);
     m_encoder = m_motor.getEncoder();
+    m_motor.setSmartCurrentLimit(ArmPhysicalConstants.maxArmAmp);
     m_PIDController = m_motor.getPIDController();
     m_currentPosition = m_encoder.getPosition();
+
     m_clampedPosition = 0;
 
+    m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_lowerlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
     // resetEncoders();
     
@@ -55,11 +65,20 @@ public class ArmSubsystem extends SubsystemBase {
     m_PIDController.setPositionPIDWrappingEnabled(true);
     m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
     m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
+    m_upperlimitswitch.enableLimitSwitch(true);
+  
   }
   
 
   public void resetEncoders(){
     m_encoder.setPosition(0);
+  }
+  public boolean checkUpperLimitSwitch(){
+    return m_upperlimitswitch.isPressed();
+  }
+
+  public boolean checkLowerLimitSwitch(){
+    return m_lowerlimitswitch.isPressed();
   }
 
   public double getEncoderInches() {
@@ -80,14 +99,21 @@ public class ArmSubsystem extends SubsystemBase {
   public void incrementPosition(double increment){
     m_currentPosition += increment;
   }
+
+  public void setPosition(double position){
+    m_currentPosition = position;
+  }
+
   public double getPosition(){
     m_currentPosition = clampValue(m_currentPosition);
     return m_currentPosition;
   }
+
   public void setArmPosition(double position){
    // limit position to safe values
   //   m_clampedPosition = clampValue(position);
 
+  //Set Reference is not set referencing properly
     m_PIDController.setReference(position, ControlType.kSmartMotion);
   }
   public boolean isInPosition(){
@@ -103,7 +129,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
-
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
      
     // This method will be called once per scheduler run

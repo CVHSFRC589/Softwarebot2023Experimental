@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Auto_Pattern;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 

@@ -70,7 +70,7 @@ public final class Constants {
     public static final int smartMotionSlot = 1;
     public static final int smartVelocitySlot = 2;
 
-    public static final double kP = 0.00003; 
+    public static final double kP = 0.0003; 
     public static final double kI = 0.000000;
     public static final double kD = 0.0000000;
     public static final double kIz = 0;
@@ -78,9 +78,9 @@ public final class Constants {
     public static final double kMaxOutput = 1;
     public static final double kMinOutput = -1;
     //public static final double maxRPM = 200;
-    public static final double maxVel = 1750;
+    public static final double maxVel = 2000;
     public static final double minVel = 0;
-    public static final double maxAcc = 1000;
+    public static final double maxAcc = 1500;
     public static final double allowedErr = 1;
     public static final double PIDWrappingMaxInput = 30;
     public static final double PIDWrappingMinInput = 5;

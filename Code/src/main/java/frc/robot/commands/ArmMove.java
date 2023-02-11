@@ -4,16 +4,18 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmMove extends CommandBase {
   private ArmSubsystem m_arm;
-  private double m_position;
+  private DoubleSupplier m_position;
 
   
   /** Creates a new ArmMove. */
-  public ArmMove(ArmSubsystem arm, double position) {
+  public ArmMove(ArmSubsystem arm, DoubleSupplier position) {
     m_arm = arm;
     m_position = position;
     addRequirements(arm);
@@ -31,7 +33,7 @@ public class ArmMove extends CommandBase {
   @Override
   public void execute() {
 
-    m_arm.setArmPosition(m_position);
+    m_arm.setArmPosition(m_position.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

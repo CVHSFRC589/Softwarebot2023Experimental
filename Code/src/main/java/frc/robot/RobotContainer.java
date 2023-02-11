@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmMove;
+import frc.robot.commands.ArmSetPosition;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.DriveAndBalance;
 import frc.robot.commands.DriveDistance;
@@ -83,7 +84,7 @@ public class RobotContainer {
 
     );
     m_robotArm.setDefaultCommand(
-        new ArmMove(m_robotArm, m_robotArm.getPosition()));
+        new ArmMove(m_robotArm, () -> m_robotArm.getPosition()));
 
     m_chooser.setDefaultOption("Complex Auto", m_complexAuto);
     m_chooser.addOption("Real Complex Auto", m_realcomplexAuto);
@@ -130,10 +131,10 @@ public class RobotContainer {
     // .toggleOnTrue(new PigeonBalanceSmartVelocity(m_robotDrive));
 
     new JoystickButton(m_driverController, OIConstants.buttonA.value)
-        .onTrue(new ArmMove(m_robotArm, 50));
+        .onTrue(new ArmSetPosition(m_robotArm, 50));
 
     new JoystickButton(m_driverController, OIConstants.buttonX.value)
-        .onTrue(new ArmMove(m_robotArm, -50));
+        .onTrue(new ArmSetPosition(m_robotArm, -50));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
@@ -141,8 +142,6 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .toggleOnTrue(new QuarterDriveSpeed(m_robotDrive));
 
-    new JoystickButton(m_driverController, OIConstants.buttonX.value)
-        .onTrue(new ArmMove(m_robotArm, -50));
     // new JoystickButton(m_driverController, OIConstants.buttonX.value)
     // .onTrue(new DriveDistance(60, 0.25, m_robotDrive));
 
@@ -150,7 +149,10 @@ public class RobotContainer {
         .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));
 
     new POVButton(m_driverController, 0)
-    .whileTrue(new ChangeArmPos(.7, m_robotArm));
+    .whileTrue(new ChangeArmPos(.5 , m_robotArm));
+
+    new POVButton(m_driverController, 180)
+    .whileTrue(new ChangeArmPos(-.5 , m_robotArm));
   }
 
   /**

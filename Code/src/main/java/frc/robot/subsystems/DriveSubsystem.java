@@ -54,7 +54,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMotor = new CANSparkMax(DriveConstants.kLeftMotorPort, MotorType.kBrushless);
     m_rightMotor = new CANSparkMax(DriveConstants.kRightMotorPort, MotorType.kBrushless);
     m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
-
+    m_rightMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
+    m_leftMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
+    
     //pigeon
     m_pigeon2 = new WPI_Pigeon2(DriveConstants.Pigeon2ID);
 
@@ -252,10 +254,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double rollAdjust(){
-    if(m_pigeon2.getRoll() > 5){
+    if(m_pigeon2.getRoll() > 2){
       return m_pigeon2.getRoll() / 90;
     }
-    else if(m_pigeon2.getRoll() < -5){
+    else if(m_pigeon2.getRoll() < -2){
       return m_pigeon2.getRoll() / 90;
     }
     else{
@@ -264,10 +266,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double pitchAdjust() {
-    if(m_pigeon2.getPitch() > 5){
+    if(m_pigeon2.getPitch() > 2){
       return m_pigeon2.getPitch() / -90;
     }
-    else if(m_pigeon2.getPitch() < -5){
+    else if(m_pigeon2.getPitch() < -2){
       return m_pigeon2.getPitch() / -90;
     }
     else{
@@ -276,10 +278,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double pitchAdjustVelocity() {
-    if(m_pigeon2.getPitch() > 5){
+    if(m_pigeon2.getPitch() > 3){
       return m_pigeon2.getPitch() * -100;
     }
-    else if(m_pigeon2.getPitch() < -5){
+    else if(m_pigeon2.getPitch() < -3){
       return m_pigeon2.getPitch() * -100;
     }
     else{
