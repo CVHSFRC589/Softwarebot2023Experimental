@@ -14,10 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmMove;
 import frc.robot.commands.ArmSetPosition;
+import frc.robot.commands.AutoGrip;
 import frc.robot.commands.CloseGripper;
 import frc.robot.commands.DefaultDrive;
 import frc.robot.commands.DriveAndBalance;
@@ -29,8 +30,10 @@ import frc.robot.commands.PIDLockInPlace;
 import frc.robot.commands.PigeonBalance;
 import frc.robot.commands.PigeonBalanceSmartVelocity;
 import frc.robot.commands.QuarterDriveSpeed;
+import frc.robot.commands.SmoothDrive;
 import frc.robot.commands.TurnDeg;
 import frc.robot.commands.TurnDegGyro;
+import frc.robot.commands.UpdateAllianceColor;
 import frc.robot.commands.Auto_Pattern.ChangeArmPos;
 import frc.robot.commands.Auto_Pattern.ComplexAuto;
 import frc.robot.commands.Auto_Pattern.Obstacle;
@@ -38,6 +41,7 @@ import frc.robot.commands.Auto_Pattern.RealComplexAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.VisualFeedbackSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -56,6 +60,7 @@ public class RobotContainer {
   private DriveSubsystem m_robotDrive = new DriveSubsystem();
   private ArmSubsystem m_robotArm = new ArmSubsystem();
   private GripperSubsystem m_robotGripper = new GripperSubsystem();
+  private VisualFeedbackSubsystem m_led = new VisualFeedbackSubsystem();
 
   // A chooser for autonomous commands
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -78,18 +83,23 @@ public class RobotContainer {
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
+    // m_robotDrive.setDefaultCommand(
+    //     new DefaultDrive(
+    //         m_robotDrive,
+    //         () -> -m_driverController.getLeftY(), //this changing doubles to supplier!
+    //         () -> -m_driverController.getLeftX()));
+
     m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-
-        new DefaultDrive(
+        new SmoothDrive(
             m_robotDrive,
-            () -> -m_driverController.getLeftY(),
-            () -> -m_driverController.getLeftX())
+            () -> -m_driverController.getLeftY(), //this changing doubles to supplier!
+            () -> -m_driverController.getLeftX()));
 
-    );
     m_robotArm.setDefaultCommand(
         new ArmMove(m_robotArm, () -> m_robotArm.getPosition()));
+
+    m_robotGripper.setDefaultCommand(
+        new AutoGrip(m_robotGripper, m_robotArm));
 
     m_chooser.setDefaultOption("Complex Auto", m_complexAuto);
     m_chooser.addOption("Real Complex Auto", m_realcomplexAuto);
@@ -97,7 +107,9 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData(m_robotDrive);
-    SmartDashboard.putNumber("Motor voltage", DriveConstants.kStatic);
+    SmartDashboard.putNumber("Motor voltage", IDConstants.kStatic);
+    SmartDashboard.putData("UpdateAllianceColor", new UpdateAllianceColor(m_led));
+    
 
   }
 
@@ -124,7 +136,7 @@ public class RobotContainer {
     // .onTrue(new DriveVoltage(SmartDashboard.getNumber("Motor voltage",0),
     // m_robotDrive));
     new JoystickButton(m_driverController, OIConstants.buttonB.value)
-        .onTrue(new DriveVoltage(DriveConstants.kStatic + .1, m_robotDrive));
+        .onTrue(new DriveVoltage(IDConstants.kStatic + .1, m_robotDrive));
 
     // new JoystickButton(m_driverController, OIConstants.buttonA.value)
     // .onTrue(new TurnDeg(90, .5, m_robotDrive));
@@ -135,28 +147,28 @@ public class RobotContainer {
     // new JoystickButton(m_driverController, Button.kRightBumper.value)
     // .toggleOnTrue(new PigeonBalanceSmartVelocity(m_robotDrive));
 
-    new JoystickButton(m_driverController, OIConstants.buttonA.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonA)
         .onTrue(new ArmSetPosition(m_robotArm, 50));
 
-    new JoystickButton(m_driverController, OIConstants.buttonX.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonX)
         .onTrue(new ArmSetPosition(m_robotArm, -50));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonRightBumper)
         .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
 
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonLeftBumper)
         .toggleOnTrue(new QuarterDriveSpeed(m_robotDrive));
 
     // new JoystickButton(m_driverController, OIConstants.buttonX.value)
     // .onTrue(new DriveDistance(60, 0.25, m_robotDrive));
 
-    new JoystickButton(m_driverController, OIConstants.buttonY.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonY)
         .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));
     
-    new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
-        .onTrue(new OpenGripper(m_robotGripper));
+    new JoystickButton(m_driverController, OIConstants.kButtonLeftTrigger)
+        .onTrue(new OpenGripper(m_robotGripper, m_robotArm));
     
-    new JoystickButton(m_driverController, Axis.kRightTrigger.value)
+    new JoystickButton(m_driverController, OIConstants.kButtonRightTrigger)
         .onTrue(new CloseGripper(m_robotGripper));
 
     new POVButton(m_driverController, 0)

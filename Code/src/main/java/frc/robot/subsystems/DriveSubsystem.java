@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
@@ -16,7 +17,8 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IDConstants;
+import frc.robot.Constants;
 import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.PhysicalConstants;
 
@@ -37,8 +39,22 @@ public class DriveSubsystem extends SubsystemBase {
   private static WPI_Pigeon2 m_pigeon2;
   
   private AnalogInput m_rangeFinder;
-  
 
+  private double percentLMotor;
+  private double percentRMotor;
+  
+  private double Psv = 0.00004; 
+  private double Isv = 0.000000000;
+  private double Dsv = 0.00000000;
+  private double Izsv = 0;
+  private double FFsv = 0;
+  private double MaxOutputsv = 1;
+  private double MinOutputsv = -1;
+  private double maxRPMsv = 5700;
+  private double maxVelsv = 5700;
+  private double minVelsv = 0;
+  private double maxAccsv = 3500;
+  private double allowedErrsv = 0.5;
 
   // The robot's drive
   private DifferentialDrive m_drive;
@@ -51,18 +67,18 @@ public class DriveSubsystem extends SubsystemBase {
     //
   //  navx = new AHRS(edu.wpi.first.wpilibj.SPI.Port.kMXP);
 
-    m_leftMotor = new CANSparkMax(DriveConstants.kLeftMotorPort, MotorType.kBrushless);
-    m_rightMotor = new CANSparkMax(DriveConstants.kRightMotorPort, MotorType.kBrushless);
+    m_leftMotor = new CANSparkMax(IDConstants.kLeftMotorPort, MotorType.kBrushless);
+    m_rightMotor = new CANSparkMax(IDConstants.kRightMotorPort, MotorType.kBrushless);
     m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
     m_rightMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
     m_leftMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
 
     //pigeon
-    m_pigeon2 = new WPI_Pigeon2(DriveConstants.Pigeon2ID);
+    m_pigeon2 = new WPI_Pigeon2(IDConstants.Pigeon2ID);
 
     m_leftEncoder = m_leftMotor.getEncoder();
     m_rightEncoder = m_rightMotor.getEncoder();
-    m_rangeFinder = new AnalogInput(DriveConstants.kRangeFinderPort);
+    m_rangeFinder = new AnalogInput(IDConstants.kRangeFinderPort);
     m_PIDmode = false;
     m_leftPIDController = m_leftMotor.getPIDController();
     m_rightPIDController = m_rightMotor.getPIDController();
@@ -74,10 +90,18 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setInverted(true);
     m_leftEncoder.setPositionConversionFactor(1.76);
     m_rightEncoder.setPositionConversionFactor(1.76);
+    // m_leftMotor.setOpenLoopRampRate(.35);
+    // m_rightMotor.setOpenLoopRampRate(.35);
+
+    // m_leftMotor.setClosedLoopRampRate(.5);
+    // m_rightMotor.setClosedLoopRampRate(.5);
     //smart motion
-   
+    
     
     setPIDConstants();
+    setSmartdashboard();
+
+    
 
   }
 
@@ -100,6 +124,72 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setSafetyEnabled(check);
   }
 
+  public void setSmartdashboard(){
+    SmartDashboard.putNumber("P Gain", Psv);
+    SmartDashboard.putNumber("I Gain", Isv);
+    SmartDashboard.putNumber("D Gain", Dsv);
+    SmartDashboard.putNumber("I Zone", Izsv);
+    SmartDashboard.putNumber("Feed Forward", FFsv);
+    SmartDashboard.putNumber("Max Output", MaxOutputsv);
+    SmartDashboard.putNumber("Min Output", MinOutputsv);
+
+    // display Smart Motion coefficients
+    SmartDashboard.putNumber("Max Velocity", maxVelsv);
+    SmartDashboard.putNumber("Min Velocity", minVelsv);
+    SmartDashboard.putNumber("Max Acceleration", maxAccsv);
+    SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErrsv);
+    SmartDashboard.putNumber("Set Position", 0);
+    SmartDashboard.putNumber("Set Velocity", 0);
+  }
+
+  public void smoothDrive(double y, double x){
+    double xbuffer = x;
+    double ybuffer = y;
+    double fwd;
+    double rot;
+    
+    double leftRPM;
+    double rightRPM;
+    //Deadzone checking
+    if(Math.abs(ybuffer)<.1){
+      ybuffer = 0;
+    }
+    
+    if(Math.abs(xbuffer)<.1){
+      xbuffer = 0;
+    }
+    fwd = ybuffer;
+    rot = xbuffer;
+    percentRMotor = fwd+rot;
+    percentLMotor = fwd-rot;
+    
+    if(Math.abs(percentLMotor)>1){
+      if(percentLMotor>0){
+        percentLMotor = 1;
+      }
+      else{
+        percentLMotor = -1;
+      }
+    }
+
+    if(Math.abs(percentRMotor)>1){
+      if(percentRMotor>0){
+        percentRMotor = 1;
+      }
+      else{
+        percentRMotor = -1;
+      }
+      
+    }
+
+    leftRPM = percentLMotor*Constants.DrivePIDConstants.maxRPM;
+    rightRPM = percentRMotor*Constants.DrivePIDConstants.maxRPM;
+    m_rightPIDController.setReference(rightRPM, ControlType.kSmartVelocity, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setReference(leftRPM, ControlType.kSmartVelocity, DrivePIDConstants.smartVelocitySlot);
+    // m_leftPIDController.setReference(leftRPM, ControlType.kVelocity,2);
+    // m_rightPIDController.setReference(rightRPM, ControlType.kVelocity,2);
+
+  }
   public void setPIDMode() {
     resetMotors();
     //true means it is in pid mode, false is in normal drive
@@ -152,32 +242,32 @@ public class DriveSubsystem extends SubsystemBase {
     //VELOCITY SLOTS
 
  //PID CONTROLER SMART MOTION CONSTANTS
-    m_leftPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVelsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVelsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAccsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErrsv, DrivePIDConstants.smartVelocitySlot);
     m_leftPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartVelocitySlot);
 
-    m_rightPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVel, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVel, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAcc, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErr, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMaxVelocity(DrivePIDConstants.maxVelsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMinOutputVelocity(DrivePIDConstants.minVelsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionMaxAccel(DrivePIDConstants.maxAccsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setSmartMotionAllowedClosedLoopError(DrivePIDConstants.allowedErrsv, DrivePIDConstants.smartVelocitySlot);
     m_rightPIDController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, DrivePIDConstants.smartVelocitySlot);
 
 
-    m_leftPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartVelocitySlot);
-    m_leftPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setP(DrivePIDConstants.kPsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setI(DrivePIDConstants.kIsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setD(DrivePIDConstants.kDsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setIZone(DrivePIDConstants.kIzsv, DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setFF(DrivePIDConstants.kFFsv, DrivePIDConstants.smartVelocitySlot);
 // Spark manual says to do this via the desktop client    m_leftPIDController.setOutputRange(PIDConstants.kMinOutput, PIDConstants.kMaxOutput);
     
     //set PID coefficients for right motor 2
-    m_rightPIDController.setP(DrivePIDConstants.kP, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setI(DrivePIDConstants.kI, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setD(DrivePIDConstants.kD, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setIZone(DrivePIDConstants.kIz, DrivePIDConstants.smartVelocitySlot);
-    m_rightPIDController.setFF(DrivePIDConstants.kFF, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setP(DrivePIDConstants.kPsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setI(DrivePIDConstants.kIsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setD(DrivePIDConstants.kDsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setIZone(DrivePIDConstants.kIzsv, DrivePIDConstants.smartVelocitySlot);
+    m_rightPIDController.setFF(DrivePIDConstants.kFFsv, DrivePIDConstants.smartVelocitySlot);
 
   }
   public void setVelocityLeftMotor(double velocity) {
@@ -288,6 +378,33 @@ public class DriveSubsystem extends SubsystemBase {
       return 0;
     }
   }
+  public void changePIDSVValues(){
+   
+    double p = SmartDashboard.getNumber("P Gain", 0);
+    double i = SmartDashboard.getNumber("I Gain", 0);
+    double d = SmartDashboard.getNumber("D Gain", 0);
+    double iz = SmartDashboard.getNumber("I Zone", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double max = SmartDashboard.getNumber("Max Output", 0);
+    double min = SmartDashboard.getNumber("Min Output", 0);
+    double maxV = SmartDashboard.getNumber("Max Velocity", 0);
+    double minV = SmartDashboard.getNumber("Min Velocity", 0);
+    double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
+    double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
+    
+    if((p != Psv)) { m_leftPIDController.setP(p,2); m_rightPIDController.setP(p,2); Psv = p; }
+    if((i != Isv)) { m_leftPIDController.setI(i,2); m_rightPIDController.setI(i,2); Isv = i; }
+    if((d != Dsv)) { m_leftPIDController.setD(d,2); m_rightPIDController.setD(d,2); Dsv = d; }
+    if((iz != Izsv)) { m_leftPIDController.setIZone(iz); m_rightPIDController.setIZone(iz); Izsv = iz; }
+    if((ff != FFsv)) { m_leftPIDController.setFF(ff); m_rightPIDController.setFF(ff); FFsv = ff; }
+    if((max != MaxOutputsv) || (min != MinOutputsv)) {  m_leftPIDController.setOutputRange(min, max); MinOutputsv = min; MaxOutputsv = max; }
+    if((maxV != maxVelsv)) { m_leftPIDController.setSmartMotionMaxVelocity(maxV,2);m_rightPIDController.setSmartMotionMaxVelocity(maxV,2); maxVelsv = maxV; }
+    if((minV != minVelsv)) { m_leftPIDController.setSmartMotionMinOutputVelocity(minV,2);m_rightPIDController.setSmartMotionMinOutputVelocity(minV,2); minVelsv = minV; }
+    if((maxA != maxAccsv)) { m_leftPIDController.setSmartMotionMaxAccel(maxA,2);m_rightPIDController.setSmartMotionMaxAccel(maxA,2); maxAccsv = maxA; }
+    if((allE != allowedErrsv)) { m_leftPIDController.setSmartMotionAllowedClosedLoopError(allE,2);m_rightPIDController.setSmartMotionAllowedClosedLoopError(allE,2); allowedErrsv = allE; }
+
+
+  }
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more
    * slowly.
@@ -323,11 +440,24 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Encoder Position", getAverageEncoderDistance());
       SmartDashboard.putNumber("Encoder Ticks", m_leftEncoder.getPosition());//log();
       SmartDashboard.putNumber("Process Variable", processVariable);
+      //PIGEON!!!!!!!!!!!!!!
       SmartDashboard.putData(m_pigeon2);
       SmartDashboard.putNumber("Pigeon Pitch", m_pigeon2.getPitch());
       SmartDashboard.putNumber("Pigeon Roll", m_pigeon2.getRoll());
+      SmartDashboard.putNumber("Pigeon Rate", m_pigeon2.getRate());
+      SmartDashboard.putNumber("Pigeon Temp", m_pigeon2.getTemp());
+      SmartDashboard.putNumber("Pigeon Yaw", m_pigeon2.getYaw());
+      SmartDashboard.putNumber("Pigeon Compass Heading", m_pigeon2.getCompassHeading()); 
+      SmartDashboard.putNumber("Pigeon Handle", m_pigeon2.getHandle());
+      SmartDashboard.putNumber("Pigeon Angle", m_pigeon2.getAngle());
+      SmartDashboard.putNumber("Pigeon Field Strength", m_pigeon2.getCompassFieldStrength());
+      SmartDashboard.putNumber("Pigeon Absolute Compass Heading", m_pigeon2.getAbsoluteCompassHeading());
+      
       // SmartDashboard.putData(this);
       SmartDashboard.putNumber("Left PID Value", processVariableLeft);
       SmartDashboard.putNumber("Right PID Value", processVariableRight);
+      SmartDashboard.putNumber("LMotor Percentage", percentLMotor);
+      SmartDashboard.putNumber("RMotor Percentage", percentRMotor);
+      changePIDSVValues();
     }
 }

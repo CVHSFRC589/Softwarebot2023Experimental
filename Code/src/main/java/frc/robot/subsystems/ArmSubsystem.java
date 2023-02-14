@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmPIDConstants;
 import frc.robot.Constants.ArmPhysicalConstants;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhysicalConstants;
@@ -35,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_motor = new CANSparkMax(DriveConstants.kArmMotorPort, MotorType.kBrushless);
+    m_motor = new CANSparkMax(IDConstants.kArmMotorPort, MotorType.kBrushless);
     m_encoder = m_motor.getEncoder();
     m_motor.setSmartCurrentLimit(ArmPhysicalConstants.maxArmAmp);
     m_PIDController = m_motor.getPIDController();
@@ -98,6 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
   public void incrementPosition(double increment){
     m_currentPosition += increment;
+    
   }
 
   public void setPosition(double position){

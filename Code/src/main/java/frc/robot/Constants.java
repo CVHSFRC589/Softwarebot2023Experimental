@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj.XboxController.Button;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final class DriveConstants {
-    public static final double kStatic = 0.16935;
-    public static final int kArmMotorPort = 12;
+  public static final class IDConstants {
+    public static final double kStatic = 0.16935;//min amount of voltage???
+    public static final int kArmMotorPort = 50;
+    public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
+    public static final int kWristPort = 40;
 
     public static final int kLeftMotorPort = 11;//11
-    public static final int kRightMotorPort = 50;//12;
+    public static final int kRightMotorPort = 12;//12;
     // Analog inputs
     public static final int kRangeFinderPort = 0;
     //pigeon!!!
@@ -35,6 +37,20 @@ public final class Constants {
     public static final Button buttonB = Button.kX;
     public static final Button buttonX = Button.kA;
     public static final Button buttonY = Button.kY;
+    
+    //XBOX CONTROLLER BINDINGS
+    public static final int kButtonX = 1;
+    public static final int kButtonA = 2;
+    public static final int kButtonB = 3;
+    public static final int kButtonY = 4;
+    public static final int kButtonLeftBumper = 5;
+    public static final int kButtonRightBumper = 6;
+    public static final int kButtonLeftTrigger = 7;
+    public static final int kButtonRightTrigger = 8;
+    public static final int kButtonBack = 9;
+    public static final int kButtonStart = 10;
+    public static final int kButtonLeftStickDown = 11;
+    public static final int kButtonRightStickDown = 12;
   }
 
   public static final class PhysicalConstants {
@@ -65,6 +81,19 @@ public final class Constants {
     public static final double minVel = 0;
     public static final double maxAcc = 4000;
     public static final double allowedErr = 1;
+
+    public static final double kPsv = 0.00025; 
+    public static final double kIsv = 0.000000000;
+    public static final double kDsv = 0.00000000;
+    public static final double kIzsv = 0;
+    public static final double kFFsv = 0;
+    public static final double kMaxOutputsv = 1;
+    public static final double kMinOutputsv = -1;
+    public static final double maxRPMsv = 5700;
+    public static final double maxVelsv = 5700;
+    public static final double minVelsv = 0;
+    public static final double maxAccsv = 3500;
+    public static final double allowedErrsv = 0;
   }
   public static final class ArmPIDConstants {
     public static final int defaultSlot = 0;
@@ -90,6 +119,13 @@ public final class Constants {
     public static final int maxArmAmp = 35;
     public static final double maxArmValue = 30;
     public static final double minArmValue = 0;
+    public static final double minOpenGripThreshold = 15;
     
   }
+  public static final class LEDConstants{
+    public static final String NETWORK_TABLE_NAME = "Visual Feedback";
+    public static final String VISUAL_FEEDBACK_TABLE_ENTRY_NAME = "VF Pattern";
+    public static final String PATTERN_FINISHED_ENTRY_NAME = "VF Pattern done";
+  }
+  
 }
