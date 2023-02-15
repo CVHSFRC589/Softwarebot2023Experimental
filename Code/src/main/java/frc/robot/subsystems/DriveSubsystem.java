@@ -22,6 +22,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.PhysicalConstants;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 public class DriveSubsystem extends SubsystemBase {
  // private AHRS navx;
@@ -58,7 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The robot's drive
   private DifferentialDrive m_drive;
-
+  private boolean m_driveType;//true is arcade false is tank drive
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -112,7 +114,27 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot, true);
+    // m_drive.arcadeDrive(fwd, rot, true);
+    m_drive.arcadeDrive(fwd, rot);
+  }
+
+  public void tankDrive(double y1, double y2) {
+    // m_drive.arcadeDrive(fwd, rot, true);
+    m_drive.tankDrive(y1, y2);
+  }
+
+  public void drive(DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation){
+    if(m_driveType){
+      m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
+    }
+    else{
+      m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
+    }
+  }
+
+  public void setDriveMode(boolean arcade){
+    m_driveType = arcade;
+    System.out.println("--------------"+m_driveType+"------------")
   }
 
   public void cancelPIDMode() {

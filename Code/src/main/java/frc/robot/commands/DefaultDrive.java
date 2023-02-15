@@ -16,8 +16,9 @@ import java.util.function.DoubleSupplier;
 public class DefaultDrive extends CommandBase {
   private final DriveSubsystem m_drive;
   private final DoubleSupplier m_forward;
+  private final DoubleSupplier m_forward2;
   private final DoubleSupplier m_rotation;
-
+  
   /**
    * Creates a new DefaultDrive.
    *
@@ -25,15 +26,21 @@ public class DefaultDrive extends CommandBase {
    * @param forward The control input for driving forwards/backwards
    * @param rotation The control input for turning
    */
-  public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier forward, DoubleSupplier rotation) {
+  public DefaultDrive(DriveSubsystem subsystem, DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation) {
     m_drive = subsystem;
-    m_forward = forward;
+    m_forward = y1;
+    m_forward2 = y2;
     m_rotation = rotation;
+    
     addRequirements(m_drive);
   }
 
+  
+
   @Override
   public void execute() {
-    m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
+    m_drive.drive(m_forward, m_forward2, m_rotation);
   }
+
+  
 }
