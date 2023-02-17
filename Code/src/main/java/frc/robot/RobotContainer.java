@@ -37,6 +37,7 @@ import frc.robot.commands.SmoothDrive;
 import frc.robot.commands.TurnDeg;
 import frc.robot.commands.TurnDegGyro;
 import frc.robot.commands.UpdateAllianceColor;
+import frc.robot.commands.WristSetSpeed;
 import frc.robot.commands.Auto_Pattern.ChangeArmPos;
 import frc.robot.commands.Auto_Pattern.ComplexAuto;
 import frc.robot.commands.Auto_Pattern.Obstacle;
@@ -45,6 +46,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.VisualFeedbackSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,6 +65,7 @@ public class RobotContainer {
     private DriveSubsystem m_robotDrive = new DriveSubsystem();
     private ArmSubsystem m_robotArm = new ArmSubsystem();
     private GripperSubsystem m_robotGripper = new GripperSubsystem();
+    private WristSubsystem m_wrist = new WristSubsystem();
     private VisualFeedbackSubsystem m_led = new VisualFeedbackSubsystem();
 
     // A chooser for autonomous commands
@@ -97,12 +100,8 @@ public class RobotContainer {
         // Configure default commands
         // Set the default drive command to split-stick arcade drive
        
-        // m_robotDrive.setDefaultCommand(
-        //         new DefaultDrive(
-        //                 m_robotDrive,
-        //                 () -> -m_driverController.getLeftY(), // this changing doubles to supplier!
-        //                 () -> -m_driverController.getRawAxis(3)));
-       
+        m_wrist.setDefaultCommand(new WristSetSpeed(m_wrist, () -> m_driverController.getLeftX()));
+        
         m_robotDrive.setDefaultCommand(
                 new DefaultDrive(
                         m_robotDrive,
@@ -204,6 +203,9 @@ public class RobotContainer {
 
         new POVButton(m_driverController, 180)
                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
+                
+        new JoystickButton(m_driverController, OIConstants.kButtonStart)
+                .onTrue(new WristSetSpeed(m_wrist, () -> 100));
     }
 
     /**

@@ -22,6 +22,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.PhysicalConstants;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
@@ -60,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The robot's drive
   private DifferentialDrive m_drive;
-  private boolean m_driveType;//true is arcade false is tank drive
+  private BooleanSupplier m_driveType;//true is arcade false is tank drive
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -92,6 +93,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setInverted(true);
     m_leftEncoder.setPositionConversionFactor(1.76);
     m_rightEncoder.setPositionConversionFactor(1.76);
+
+    m_driveType = () -> false;
     // m_leftMotor.setOpenLoopRampRate(.35);
     // m_rightMotor.setOpenLoopRampRate(.35);
 
@@ -124,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drive(DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation){
-    if(m_driveType){
+    if(m_driveType.getAsBoolean()){
       m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
     }
     else{
@@ -133,8 +136,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setDriveMode(boolean arcade){
-    m_driveType = arcade;
-    System.out.println("--------------"+m_driveType+"------------")
+    m_driveType = () -> arcade;
+    System.out.println("--------------"+m_driveType+"------------");
   }
 
   public void cancelPIDMode() {

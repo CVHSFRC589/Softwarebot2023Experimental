@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
   public static final class IDConstants {
     public static final double kStatic = 0.16935;//min amount of voltage???
+    public static final int kGripperForward = 0;
+    public static final int kGripperReverse = 1;
     public static final int kArmMotorPort = 50;
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
     public static final int kWristPort = 40;

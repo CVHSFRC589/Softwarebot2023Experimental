@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +24,7 @@ private NetworkTableEntry m_patternOver;
 
   /** Creates a new GripperSubsystem. */
   public GripperSubsystem() {
-    m_gripper = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
+    m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kGripperForward, IDConstants.kGripperReverse); //new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
     m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
     m_compressor.enableAnalog(0, 0);
     
