@@ -5,47 +5,88 @@
 package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
+import edu.wpi.first.wpilibj.Timer;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.IDConstants;
+import frc.robot.Constants.PhysicalConstants;
 
 public class WristSubsystem extends SubsystemBase {
   //declare wrist motor and encoder
   public WPI_TalonSRX m_wrist;
+  public TalonSRXConfiguration m_talonConfig;
   public SensorCollection m_wristEncoder;
-  public int m_wristRevolutions;
+  public double m_encoderPositionDeg;
+  public Timer m_timer;
 
   /** Creates a new WristSubsystem. */
   public WristSubsystem() {
     // 
     //sets motor to motor id
     m_wrist = new WPI_TalonSRX(IDConstants.kWristPort);
-    m_wrist.configFactoryDefault();
-    m_wrist.setNeutralMode(NeutralMode.Brake);
     
-    m_wristEncoder = m_wrist.getSensorCollection();
+    m_wrist.configFactoryDefault();
 
+    m_wrist.set(TalonSRXControlMode.Position, 0);
+    
+    // m_wrist.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative);
+    m_wrist.setNeutralMode(NeutralMode.Brake);
+    m_talonConfig = new TalonSRXConfiguration();
+    m_encoderPositionDeg =1;
+
+    // m_wrist.configPeakCurrentLimit(Constants.kPeakCurrentAmps, Constants.kTimeoutMs);
+		// m_wrist.configPeakCurrentDuration(Constants.kPeakTimeMs, Constants.kTimeoutMs);
+		// m_wrist.configContinuousCurrentLimit(Constants.kContinCurrentAmps, Constants.kTimeoutMs);
+		// m_wrist.enableCurrentLimit(_currentLimEn); // Honor initial setting
+
+		/* setup a basic closed loop */
+		m_wrist.setNeutralMode(NeutralMode.Brake); // Netural Mode override 
+    m_wrist.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);// Sensor Type 
+                                            // Constants.PID_PRIMARY,      // PID Index
+                                            // Constants.kTimeoutMs);      // Config Timeout
+
+        /* Ensure Sensor is in phase, else closed loop will not work.
+         * Positive Sensor should match Motor Positive output (Green LED)
+         */
+        m_wrist.setSensorPhase(true);
+        // m_wrist.configAllSettings();
+        
+        // /* Gains for Position Closed Loop servo */
+        // m_wrist.config_kP(Constants.SLOT_0, Constants.kGains.kP, Constants.kTimeoutMs);
+        // m_wrist.config_kI(Constants.SLOT_0, Constants.kGains.kI, Constants.kTimeoutMs);
+        // m_wrist.config_kD(Constants.SLOT_0, Constants.kGains.kD, Constants.kTimeoutMs);
+        // m_wrist.config_kF(Constants.SLOT_0, Constants.kGains.kF, Constants.kTimeoutMs);
+
+
+
+    m_wristEncoder = m_wrist.getSensorCollection();
+    
   }
 
   public void wristMove(DoubleSupplier joystick) {
-    if(m_wristEncoder.getQuadraturePosition()==1){
-      m_wristRevolutions++;
-    }
-    if (m_wristRevolutions<100) {
+    
+    if (m_encoderPositionDeg<=60&&m_encoderPositionDeg>=-60) {
       m_wrist.set(joystick.getAsDouble());
     }
   }
 
   @Override
   public void periodic() {
+    m_encoderPositionDeg =  (m_wristEncoder.getPulseWidthPosition())/PhysicalConstants.WRIST_ENCODER_TO_DEG;
     SmartDashboard.putNumber("Wrist Quadrature Position", m_wristEncoder.getQuadraturePosition());
-    SmartDashboard.putNumber("Wrist Position????", m_wrist.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Wrist Degrees????", m_encoderPositionDeg);
     // This method will be called once per scheduler run
   }
 }

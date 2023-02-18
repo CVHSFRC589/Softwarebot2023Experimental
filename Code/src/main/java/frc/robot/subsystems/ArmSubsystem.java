@@ -27,8 +27,8 @@ import frc.robot.Constants.PhysicalConstants;
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
   private SparkMaxPIDController m_PIDController;
-  private SparkMaxLimitSwitch m_upperlimitswitch;
-  private SparkMaxLimitSwitch m_lowerlimitswitch;
+  // private SparkMaxLimitSwitch m_upperlimitswitch;
+  // private SparkMaxLimitSwitch m_lowerlimitswitch;
   private RelativeEncoder m_encoder;
   private double m_clampedPosition;
   private double m_currentPosition;
@@ -43,8 +43,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_clampedPosition = 0;
 
-    m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
     // resetEncoders();
     
@@ -62,10 +62,12 @@ public class ArmSubsystem extends SubsystemBase {
     m_PIDController.setFF(ArmPIDConstants.kFF,0);
 
     //max and min values??
+    
+    //THESE DO NOT WORK - gad
     m_PIDController.setPositionPIDWrappingEnabled(true);
     m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
     m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
-    m_upperlimitswitch.enableLimitSwitch(true);
+    // m_upperlimitswitch.enableLimitSwitch(true);
   
   }
   
@@ -73,13 +75,13 @@ public class ArmSubsystem extends SubsystemBase {
   public void resetEncoders(){
     m_encoder.setPosition(0);
   }
-  public boolean checkUpperLimitSwitch(){
-    return m_upperlimitswitch.isPressed();
-  }
+  // public boolean checkUpperLimitSwitch(){
+  //   return m_upperlimitswitch.isPressed();
+  // }
 
-  public boolean checkLowerLimitSwitch(){
-    return m_lowerlimitswitch.isPressed();
-  }
+  // public boolean checkLowerLimitSwitch(){
+  //   return m_lowerlimitswitch.isPressed();
+  // }
 
   public double getEncoderInches() {
     return m_encoder.getPosition();
@@ -131,8 +133,8 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
-    SmartDashboard.putBoolean("Upper limit Switch", m_upperlimitswitch.isPressed());
-    SmartDashboard.putBoolean("Lower limit Switch", m_lowerlimitswitch.isPressed());
+    // SmartDashboard.putBoolean("Upper limit Switch", m_upperlimitswitch.isPressed());
+    // SmartDashboard.putBoolean("Lower limit Switch", m_lowerlimitswitch.isPressed());
     // This method will be called on      ce per scheduler run
   }
 }

@@ -87,6 +87,7 @@ public class RobotContainer {
     private final Command m_Obstacle = new Obstacle(m_robotDrive);
 
     
+    
 
     private final Command m_setArcade = new SetDriveMode(m_robotDrive, true);
     private final Command m_setTank = new SetDriveMode(m_robotDrive, false);
@@ -205,7 +206,8 @@ public class RobotContainer {
                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
                 
         new JoystickButton(m_driverController, OIConstants.kButtonStart)
-                .onTrue(new WristSetSpeed(m_wrist, () -> 100));
+                .onTrue(new WristSetSpeed(m_wrist, () -> 1
+                ));
     }
 
     /**
