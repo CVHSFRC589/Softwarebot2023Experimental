@@ -18,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.DefaultArmCommand;
-import frc.robot.commands.ArmFreeAndPos;
+import frc.robot.commands.ArmStayInPlace;
+import frc.robot.commands.ArmFollowJoy;
+import frc.robot.commands.ArmMoveAndLock;
 import frc.robot.commands.ArmSetPosition;
 import frc.robot.commands.AutoGrip;
 import frc.robot.commands.CloseGripper;
@@ -117,15 +118,17 @@ public class RobotContainer {
                 // () -> -m_driverController.getLeftY(), //this changing doubles to supplier!
                 // () -> -m_driverController.getLeftX()));
                
-                //LOCKS ARM IN PLACE
-                // m_robotArm.setDefaultCommand(
-                //                 new ArmStayInPlace(m_robotArm, () -> m_robotArm.getTargetPosition()));
-                
+                // LOCKS ARM IN PLACE
                 m_robotArm.setDefaultCommand(
-                                new ArmFreeAndPos(m_robotArm, 
-                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
-                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis),
-                                () -> m_robotArm.getTargetPosition()));
+                                new ArmFollowJoy(m_robotArm, 
+                                                () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
+                                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
+                
+                // m_robotArm.setDefaultCommand(
+                //                 new ArmMoveAndLock(m_robotArm,m_operatorJoyStick
+                //                                 // () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
+                //                                 // () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)
+                //                                 ));
 
                 m_robotGripper.setDefaultCommand(
                                 new AutoGrip(m_robotGripper, m_robotArm));
@@ -156,8 +159,7 @@ public class RobotContainer {
          */
         private void configureButtonBindings() {
 
-                // ==========================================DRIVER
-                // CONTROLS==========================================
+                // ==========================================DRIVER CONTROLS==========================================
 
                 // DRIVE AND BALANCE
                 new JoystickButton(m_driverJoyStick1, 1)
@@ -166,27 +168,27 @@ public class RobotContainer {
                 // QUARTER SPEED
                 new JoystickButton(m_driverJoyStick1, 2)
                                 .toggleOnTrue(new QuarterDriveSpeed(m_robotDrive));
-
+                //TOGGLE GRIPPER
                 new JoystickButton(m_driverJoyStick1, 3)
                                 .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
 
-                // =======================================================================================================
+                // =====================================================================================================
 
-                // ==========================================OPERATOR
-                // CONTROLS==========================================
+                // ==========================================OPERATOR CONTROLS==========================================
 
-                // new POVButton(m_operatorJoyStick, 0)
-                // .whileTrue(new ChangeArmPos(.5, m_robotArm));
+                new POVButton(m_operatorJoyStick, 0)
+                .whileTrue(new ChangeArmPos(.5, m_robotArm));
 
                 new POVButton(m_operatorJoyStick, 180)
                                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
-
+                //min and max arm values
                 new JoystickButton(m_operatorJoyStick, 1)
-                                .onTrue(new ArmSetPosition(m_robotArm, 50));
+                                .toggleOnTrue(new ArmSetPosition(m_robotArm, 50));
 
-                new JoystickButton(m_operatorJoyStick, 1)
-                                .onTrue(new ArmSetPosition(m_robotArm, -50));
-
+                new JoystickButton(m_operatorJoyStick, 2)
+                                .toggleOnTrue(new ArmSetPosition(m_robotArm, -50));
+                
+                //wrist 
                 new POVButton(m_operatorJoyStick, 0)
                                 .onTrue(new WristSetSpeed(m_wrist, () -> 1));
 

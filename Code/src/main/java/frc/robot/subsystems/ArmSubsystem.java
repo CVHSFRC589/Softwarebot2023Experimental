@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder m_encoder;
   private double m_clampedPosition;
   private double m_currentPosition;
-  private boolean m_freecontrol;
+  private boolean m_fixedposition;
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_motor = new CANSparkMax(IDConstants.kArmMotorPort, MotorType.kBrushless);
@@ -40,7 +40,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_motor.setSmartCurrentLimit(ArmPhysicalConstants.maxArmAmp);
     m_PIDController = m_motor.getPIDController();
     m_currentPosition = m_encoder.getPosition();
-    m_freecontrol = true;
+    m_fixedposition = false;
     m_clampedPosition = 0;
 
     // m_upperlimitswitch =
@@ -112,15 +112,21 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setArmPosition(double position) {
+    m_fixedposition = true;
     // limit position to safe values
     // m_clampedPosition = clampValue(position);
     m_PIDController.setReference(position, ControlType.kSmartMotion);
-    m_freecontrol = false;
+    
   }
-
+  public void setVelocityArm(double velocity){
+    m_PIDController.setReference(velocity, ControlType.kVelocity, ArmPIDConstants.defaultSlot);
+  }
+  
   public boolean isInPosition(){
 
     if(getEncoderInches()>=m_clampedPosition){
+      m_fixedposition = false;
+
       return true;
     }
     else{
@@ -129,27 +135,9 @@ public class ArmSubsystem extends SubsystemBase {
     
   }
   
-  public void armFreeAndPosition(DoubleSupplier y, DoubleSupplier speed, double position){
-    position = clampValue(position);
 
-    if(m_freecontrol){
-      if(getEncoderInches()<=ArmPhysicalConstants.maxArmValue&&getEncoderInches()>=ArmPhysicalConstants.minArmValue){
-      m_motor.set(y.getAsDouble()*speed.getAsDouble());
-      }
-    }
-    else{
-      m_PIDController.setReference(position, ControlType.kSmartMotion);
-    }
   
-  }
-  public void toggleFreeMode(){
-    if(m_freecontrol){
-      m_freecontrol = false;
-    }
-    else{
-      m_freecontrol = true;
-    }
-  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());

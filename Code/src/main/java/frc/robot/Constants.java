@@ -23,12 +23,12 @@ public final class Constants {
     public static final double kStatic = 0.16935;// min amount of voltage???
     public static final int kGripperForward = 0;
     public static final int kGripperReverse = 1;
-    public static final int kArmMotorPort = 49;// 12;//50
+    public static final int kArmMotorPort = 12;// 12;//50
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
     public static final int kWristPort = 40;
 
     public static final int kLeftMotorPort = 11;// 11
-    public static final int kRightMotorPort = 12;// 12;
+    public static final int kRightMotorPort = 50;// 12;
     
     public static final int kLeftMotorPort2 = 13;// 11
     public static final int kRightMotorPort2 = 14;// 12;
@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kFF = 0;
     public static final double kMaxOutput = 1;
     public static final double kMinOutput = -1;
-    // public static final double maxRPM = 200;
+    public static final double maxRPM = 1000;
     public static final double maxVel = 4500;
     public static final double minVel = 0;
     public static final double maxAcc = 3000;

@@ -5,10 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmSetPosition extends InstantCommand {
+public class ArmSetPosition extends CommandBase {
   private ArmSubsystem m_arm;
   private double m_position;
   /** Creates a new ArmSetPosition. */
@@ -22,6 +23,11 @@ public class ArmSetPosition extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.setPosition(m_position);
+    m_arm.setArmPosition(m_position);
   }
+  @Override
+  public boolean isFinished() {
+    return m_arm.isInPosition();
+  }
+
 }

@@ -2,20 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Auto_Pattern;
+package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ChangeArmPos extends CommandBase {
+public class ChangeArmPosSupplier extends CommandBase {
   /** Creates a new ChangeArmPos. */
   private ArmSubsystem m_arm;
   private double m_increment;
-  public ChangeArmPos(double increment, ArmSubsystem arm) {
+  public ChangeArmPosSupplier(DoubleSupplier y, DoubleSupplier slider , ArmSubsystem arm) {
     m_arm = arm;
-    m_increment = increment;
+    m_increment = y.getAsDouble()*slider.getAsDouble()*.1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
