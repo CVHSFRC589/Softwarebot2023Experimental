@@ -23,12 +23,15 @@ public final class Constants {
     public static final double kStatic = 0.16935;// min amount of voltage???
     public static final int kGripperForward = 0;
     public static final int kGripperReverse = 1;
-    public static final int kArmMotorPort = 50;// 12;//50
+    public static final int kArmMotorPort = 49;// 12;//50
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
     public static final int kWristPort = 40;
 
     public static final int kLeftMotorPort = 11;// 11
     public static final int kRightMotorPort = 12;// 12;
+    
+    public static final int kLeftMotorPort2 = 13;// 11
+    public static final int kRightMotorPort2 = 14;// 12;
     // Analog inputs
     public static final int kRangeFinderPort = 0;
     // pigeon!!!
@@ -37,26 +40,33 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverController1Port = 0;
+    public static final int kDriverController2Port = 1;
+    public static final int kOperatorControllerPort = 2;
 
     public static final Button buttonA = Button.kB;
     public static final Button buttonB = Button.kX;
     public static final Button buttonX = Button.kA;
     public static final Button buttonY = Button.kY;
 
-    // XBOX CONTROLLER BINDINGS
-    public static final int kButtonX = 1;
-    public static final int kButtonA = 2;
-    public static final int kButtonB = 3;
-    public static final int kButtonY = 4;
-    public static final int kButtonLeftBumper = 5;
-    public static final int kButtonRightBumper = 6;
-    public static final int kButtonLeftTrigger = 7;
-    public static final int kButtonRightTrigger = 8;
-    public static final int kButtonBack = 9;
-    public static final int kButtonStart = 10;
-    public static final int kButtonLeftStickDown = 11;
-    public static final int kButtonRightStickDown = 12;
+    public static final int kYaxis = 1;
+    public static final int kXaxis = 0;
+    public static final int kZaxis = 2;
+    public static final int kSlideraxis = 3;
+
+    // LOGITECH XBOX CONTROLLER BINDINGS
+    public static final int kButtonXXBOX = 1;
+    public static final int kButtonAXBOX = 2;
+    public static final int kButtonBXBOX = 3;
+    public static final int kButtonYXBOX = 4;
+    public static final int kButtonLeftBumperXBOX = 5;
+    public static final int kButtonRightBumperXBOX = 6;
+    public static final int kButtonLeftTriggerXBOX = 7;
+    public static final int kButtonRightTriggerXBOX = 8;
+    public static final int kButtonBackXBOX = 9;
+    public static final int kButtonStartXBOX = 10;
+    public static final int kButtonLeftStickDownXBOX = 11;
+    public static final int kButtonRightStickDownXBOX = 12;
   }
 
   public static final class PhysicalConstants {
@@ -64,7 +74,7 @@ public final class Constants {
     public static final double WRIST_ENCODER_TO_DEG = 5.7;
     public static final int maxDriveAmps = 35;
     public static final int DRIVE_WHEEL_RADIUS = 3;
-    public static final double ARM_GEAR_RATIO = .01;// 1.76;//10.71;//1.25;
+    public static final double ARM_GEAR_RATIO = 1.76;//.01;
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
 
     public static final double DRIVE_WHEEL_CIRCUM = 2 * Math.PI * DRIVE_WHEEL_RADIUS;
@@ -125,6 +135,12 @@ public final class Constants {
   }
 
   public static final class ArmPhysicalConstants {
+    public static final double level2cone = 20;
+    public static final double level2cube = 17;
+    public static final double levelportal = 15;
+    public static final double level1conecube = 10;
+    public static final double levelfloor = 13;
+
     public static final int maxArmAmp = 35;
     public static final double maxArmValue = 30;
     public static final double minArmValue = 0;

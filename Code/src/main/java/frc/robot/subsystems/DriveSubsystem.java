@@ -30,6 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
  // private AHRS navx;
   CANSparkMax m_leftMotor;
   CANSparkMax m_rightMotor;
+  CANSparkMax m_leftMotor2;
+  CANSparkMax m_rightMotor2;
 
   private SparkMaxPIDController m_leftPIDController;
   private SparkMaxPIDController m_rightPIDController;
@@ -72,6 +74,12 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_leftMotor = new CANSparkMax(IDConstants.kLeftMotorPort, MotorType.kBrushless);
     m_rightMotor = new CANSparkMax(IDConstants.kRightMotorPort, MotorType.kBrushless);
+    m_leftMotor2 = new CANSparkMax(IDConstants.kLeftMotorPort2, MotorType.kBrushless);
+    m_rightMotor2 = new CANSparkMax(IDConstants.kRightMotorPort2, MotorType.kBrushless);
+    
+    m_leftMotor2.follow(m_leftMotor);
+    m_rightMotor2.follow(m_rightMotor);
+
     m_drive = new DifferentialDrive(m_leftMotor, m_rightMotor);
     m_rightMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
     m_leftMotor.setSmartCurrentLimit(PhysicalConstants.maxDriveAmps);
@@ -90,7 +98,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMotor.setIdleMode(IdleMode.kBrake);
     m_rightMotor.setIdleMode(IdleMode.kBrake);
     m_leftMotor.setInverted(false);
-    m_rightMotor.setInverted(true);
+    m_rightMotor.setInverted(false);
     m_leftEncoder.setPositionConversionFactor(1.76);
     m_rightEncoder.setPositionConversionFactor(1.76);
 
@@ -127,12 +135,19 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drive(DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation){
-    if(m_driveType.getAsBoolean()){
-      m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
-    }
-    else{
-      m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
-    }
+    //if true run arcade drive
+    // System.out.println("------------"+ m_driveType.getAsBoolean()+"----------");
+    m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
+    // if(m_driveType.getAsBoolean()){
+      
+    //   System.out.println("------------"+ y1.getAsDouble()+"----------");
+    //   System.out.println("------------"+ y2.getAsDouble()+"----------");
+    //   System.out.println("------------"+ rotation.getAsDouble()+"----------");
+    // }
+    // //else run tank!!! ---> default option is tank
+    // else{
+    //   m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
+    // }
   }
 
   public void setDriveMode(boolean arcade){

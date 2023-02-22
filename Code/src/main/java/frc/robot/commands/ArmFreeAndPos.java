@@ -4,19 +4,22 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import java.util.function.DoubleSupplier;
 
-public class ArmMove extends CommandBase {
+public class ArmFreeAndPos extends CommandBase {
+  /** Creates a new ArmFreeAndPos. */
   private ArmSubsystem m_arm;
+  private DoubleSupplier m_speed;
+  private DoubleSupplier m_throttle;
   private DoubleSupplier m_position;
 
-  
-  /** Creates a new ArmMove. */
-  public ArmMove(ArmSubsystem arm, DoubleSupplier position) {
+  public ArmFreeAndPos(ArmSubsystem arm, DoubleSupplier speed, DoubleSupplier throttle, DoubleSupplier position) {
     m_arm = arm;
+    m_speed = speed;
+    m_throttle = throttle;
     m_position = position;
     addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -25,15 +28,13 @@ public class ArmMove extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    m_arm.setArmPosition(m_position.getAsDouble());
+    m_arm.armFreeAndPosition(m_speed, m_throttle, m_position.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

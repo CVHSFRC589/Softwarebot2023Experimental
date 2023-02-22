@@ -28,7 +28,7 @@ public class WristSubsystem extends SubsystemBase {
   public WPI_TalonSRX m_wrist;
   public TalonSRXConfiguration m_talonConfig;
   public SensorCollection m_wristEncoder;
-  public double m_encoderPositionDeg;
+  
   public Timer m_timer;
 
   /** Creates a new WristSubsystem. */
@@ -44,7 +44,7 @@ public class WristSubsystem extends SubsystemBase {
     // m_wrist.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative);
     m_wrist.setNeutralMode(NeutralMode.Brake);
     m_talonConfig = new TalonSRXConfiguration();
-    m_encoderPositionDeg =1;
+    
 
     // m_wrist.configPeakCurrentLimit(Constants.kPeakCurrentAmps, Constants.kTimeoutMs);
 		// m_wrist.configPeakCurrentDuration(Constants.kPeakTimeMs, Constants.kTimeoutMs);
@@ -72,21 +72,33 @@ public class WristSubsystem extends SubsystemBase {
 
 
     m_wristEncoder = m_wrist.getSensorCollection();
-    
+    resetEncoders();
   }
+  
+  public double getWristDeg(){
+    return m_wristEncoder.getQuadraturePosition()*(1/PhysicalConstants.WRIST_ENCODER_TO_DEG);
+   
+  }
+  public void resetEncoders(){
+    m_wristEncoder.setQuadraturePosition(0, 0);
+    SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()", m_wristEncoder.getQuadraturePosition());
 
+  }
   public void wristMove(DoubleSupplier joystick) {
     
-    if (m_encoderPositionDeg<=60&&m_encoderPositionDeg>=-60) {
+    if (getWristDeg()<=120 && getWristDeg()>=0) {
       m_wrist.set(joystick.getAsDouble());
+      
+      }
+    else{
+      m_wrist.set(0);
     }
   }
 
   @Override
   public void periodic() {
-    m_encoderPositionDeg =  (m_wristEncoder.getPulseWidthPosition())/PhysicalConstants.WRIST_ENCODER_TO_DEG;
-    SmartDashboard.putNumber("Wrist Quadrature Position", m_wristEncoder.getQuadraturePosition());
-    SmartDashboard.putNumber("Wrist Degrees????", m_encoderPositionDeg);
+    SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()", m_wristEncoder.getQuadraturePosition());
+    SmartDashboard.putNumber("Wrist Degrees????", getWristDeg());
     // This method will be called once per scheduler run
   }
 }

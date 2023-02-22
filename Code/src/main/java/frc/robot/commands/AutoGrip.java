@@ -30,7 +30,7 @@ public class AutoGrip extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_arm.getPosition()<ArmPhysicalConstants.minOpenGripThreshold){
+    if(m_arm.getTargetPosition()<ArmPhysicalConstants.minOpenGripThreshold){
       m_grip.close();
     }
   }

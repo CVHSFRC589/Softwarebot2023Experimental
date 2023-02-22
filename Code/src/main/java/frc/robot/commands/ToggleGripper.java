@@ -12,25 +12,29 @@ import frc.robot.subsystems.GripperSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class OpenGripper extends InstantCommand {
-  private GripperSubsystem m_gripperSubsystem;
+public class ToggleGripper extends InstantCommand {
+  private GripperSubsystem m_grip;
   private ArmSubsystem m_arm;
-  public OpenGripper(GripperSubsystem gripper, ArmSubsystem arm) {
+  public ToggleGripper(GripperSubsystem gripper, ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gripper);
     m_arm = arm;
-    m_gripperSubsystem = gripper;
+    m_grip = gripper;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_arm.getTargetPosition()<ArmPhysicalConstants.maxArmValue && m_arm.getTargetPosition()>
-    ArmPhysicalConstants.minArmValue+15){
-      m_gripperSubsystem.open();
+    if(m_arm.getTargetPosition()<ArmPhysicalConstants.maxArmValue && m_arm.getTargetPosition()>ArmPhysicalConstants.minArmValue+ArmPhysicalConstants.minOpenGripThreshold){
+      if(m_grip.isGripperOpen()){
+        m_grip.close();
+      }
+      else{
+        m_grip.open();
+      }
     }
     else {
-      System.out.println("----------ARM NOT OPENING ------> OUT OF OPENING BOUNDS---------");
+      System.out.println("----------GRIPPER NOT OPENING ------> OUT OF OPENING BOUNDS---------");
     }
   }
 }

@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 
 public class GripperSubsystem extends SubsystemBase {
+private double m_currentPosition;
 private DoubleSolenoid m_gripper;
 private Compressor m_compressor;
 private NetworkTable m_table;
@@ -32,7 +33,10 @@ private NetworkTableEntry m_patternOver;
     m_patternOver = m_table.getEntry(LEDConstants.PATTERN_FINISHED_ENTRY_NAME);
     m_pattern = m_table.getEntry(LEDConstants.VISUAL_FEEDBACK_TABLE_ENTRY_NAME);
   }
-
+  public void incrementPosition(double increment){
+    m_currentPosition += increment;
+    
+  }
   public void open(){
     m_gripper.set(DoubleSolenoid.Value.kReverse);
     m_pattern.setString("rainbow party palette");
@@ -51,6 +55,16 @@ private NetworkTableEntry m_patternOver;
     else
       close();
   }
+
+  public boolean isGripperOpen(){
+    if(m_gripper.get()==DoubleSolenoid.Value.kForward){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
 
   public DoubleSolenoid.Value getGripperValue(){
     return m_gripper.get();

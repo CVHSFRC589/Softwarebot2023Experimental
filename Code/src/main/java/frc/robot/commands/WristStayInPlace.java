@@ -8,34 +8,39 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
-public class WristSetSpeed extends CommandBase {
+public class WristStayInPlace extends CommandBase {
   private WristSubsystem m_wrist;
-  private DoubleSupplier m_speed;
-  /** Creates a new WristSetSpeed. */
-  public WristSetSpeed(WristSubsystem wrist ,DoubleSupplier speed) {
+  private DoubleSupplier m_position;
+
+  
+  /** Creates a new ArmMove. */
+  public WristStayInPlace(WristSubsystem wrist, DoubleSupplier position) {
     m_wrist = wrist;
-    m_speed = speed;
-    addRequirements(m_wrist);
+    m_position = position;
+    addRequirements(wrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_wrist.resetEncoders();
+    
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_wrist.wristMove(m_speed);
+    m_wrist.wristMove(m_position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_wrist.wristMove(() -> 0);
+    
   }
 
   // Returns true when the command should end.
