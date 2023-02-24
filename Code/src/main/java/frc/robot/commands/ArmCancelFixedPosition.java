@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmSetPosition extends CommandBase {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class ArmCancelFixedPosition extends InstantCommand {
   private ArmSubsystem m_arm;
-  private double m_position;
-  /** Creates a new ArmSetPosition. */
-  public ArmSetPosition(ArmSubsystem arm, double position) {
-    m_position = position;
+
+  public ArmCancelFixedPosition(ArmSubsystem arm) {
     m_arm = arm;
     addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,13 +23,6 @@ public class ArmSetPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_position = m_arm.clampValue(m_position);
-    m_arm.setArmPosition(m_position);
+    m_arm.canceledFixedPositionMode();
   }
-  @Override
-  public boolean isFinished() {
-    return !m_arm.isInFixedPositionMode();
-    // return m_arm.isInPosition(m_position);
-  }
-
 }

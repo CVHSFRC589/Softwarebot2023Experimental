@@ -84,7 +84,7 @@ public class WristSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()", m_wristEncoder.getQuadraturePosition());
 
   }
-  public void wristMove(DoubleSupplier joystick) {
+  public void wristSetVelocity(DoubleSupplier joystick) {
     
     if (getWristDeg()<=120 && getWristDeg()>=0) {
       m_wrist.set(joystick.getAsDouble());

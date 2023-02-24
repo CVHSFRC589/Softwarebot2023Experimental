@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmStayInPlace;
+import frc.robot.commands.ArmCancelFixedPosition;
 import frc.robot.commands.ArmFollowJoy;
 import frc.robot.commands.ArmMoveAndLock;
 import frc.robot.commands.ArmSetPosition;
@@ -122,7 +123,7 @@ public class RobotContainer {
                 m_robotArm.setDefaultCommand(
                                 new ArmFollowJoy(m_robotArm, 
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
-                                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
+                                                () -> -m_operatorJoyStick.getRawAxis(2)));
                 
                 // m_robotArm.setDefaultCommand(
                 //                 new ArmMoveAndLock(m_robotArm,m_operatorJoyStick
@@ -175,19 +176,25 @@ public class RobotContainer {
                 // =====================================================================================================
 
                 // ==========================================OPERATOR CONTROLS==========================================
+                
+                // new POVButton(m_operatorJoyStick, 0)
+                // .whileTrue(new ChangeArmPos(.5, m_robotArm));
 
-                new POVButton(m_operatorJoyStick, 0)
-                .whileTrue(new ChangeArmPos(.5, m_robotArm));
+                // new POVButton(m_operatorJoyStick, 180)
+                //                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
 
-                new POVButton(m_operatorJoyStick, 180)
-                                .whileTrue(new ChangeArmPos(-.5, m_robotArm));
-                //min and max arm values
+                //MAX ARM VALUE GO TO MAX HEIGHT
                 new JoystickButton(m_operatorJoyStick, 1)
                                 .toggleOnTrue(new ArmSetPosition(m_robotArm, 50));
-
+                //MIN ARM VALUE GO TO BASE/INSIDE
                 new JoystickButton(m_operatorJoyStick, 2)
                                 .toggleOnTrue(new ArmSetPosition(m_robotArm, -50));
-                
+                //CANCEL FIXED POSITION - RETURN TO JOYSTICK FOLLOW
+                new JoystickButton(m_operatorJoyStick, 4)
+                                .toggleOnTrue(new ArmCancelFixedPosition(m_robotArm));
+                //LOCK ARM IN PLACE
+                new JoystickButton(m_operatorJoyStick, 3)
+                                .toggleOnTrue(new ArmSetPosition(m_robotArm, m_robotArm.getTargetPosition()));
                 //wrist 
                 new POVButton(m_operatorJoyStick, 0)
                                 .onTrue(new WristSetSpeed(m_wrist, () -> 1));

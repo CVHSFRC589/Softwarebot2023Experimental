@@ -142,8 +142,8 @@ public final class Constants {
     public static final double levelfloor = 13;
 
     public static final int maxArmAmp = 35;
-    public static final double maxArmValue = 30;
-    public static final double minArmValue = 0;
+    public static final double maxArmValue = 31;
+    public static final double minArmValue = -1;
     public static final double minOpenGripThreshold = 15;
 
   }

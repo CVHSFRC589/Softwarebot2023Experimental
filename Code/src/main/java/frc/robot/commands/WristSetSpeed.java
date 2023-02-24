@@ -23,19 +23,19 @@ public class WristSetSpeed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_wrist.resetEncoders();
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_wrist.wristMove(m_speed);
+    m_wrist.wristSetVelocity(m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_wrist.wristMove(() -> 0);
+    m_wrist.wristSetVelocity(() -> 0);
   }
 
   // Returns true when the command should end.

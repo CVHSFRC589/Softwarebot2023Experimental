@@ -87,7 +87,7 @@ public class ArmSubsystem extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
-  private double clampValue(double x) {
+  public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
     } else if (x < ArmPhysicalConstants.minArmValue) {
@@ -119,13 +119,25 @@ public class ArmSubsystem extends SubsystemBase {
     
   }
   public void setVelocityArm(double velocity){
+    System.out.println(velocity);
     m_PIDController.setReference(velocity, ControlType.kVelocity, ArmPIDConstants.defaultSlot);
   }
-  
-  public boolean isInPosition(){
+  public boolean isInFixedPositionMode(){
+    return m_fixedposition;
 
-    if(getEncoderInches()>=m_clampedPosition){
-      m_fixedposition = false;
+  }
+
+  public void canceledFixedPositionMode(){
+    System.out.println("-----------------CANCLED FIXED POS-----------------------");
+    m_fixedposition = false;
+  }
+
+  public boolean isInPosition(double position){
+    
+    position = clampValue(position);
+    if(getEncoderInches()>=position){
+      
+      // m_fixedposition = false;
 
       return true;
     }
@@ -140,9 +152,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // System.out.println("--------------------" + (getEncoderInches()>=m_clampedPosition));
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
+    SmartDashboard.putBoolean("Fixed pos?", m_fixedposition);
     // SmartDashboard.putBoolean("Upper limit Switch",
     // m_upperlimitswitch.isPressed());
     // SmartDashboard.putBoolean("Lower limit Switch",
