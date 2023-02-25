@@ -25,16 +25,17 @@ public class ToggleGripper extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_arm.getTargetPosition()<ArmPhysicalConstants.maxArmValue && m_arm.getTargetPosition()>ArmPhysicalConstants.minArmValue+ArmPhysicalConstants.minOpenGripThreshold){
-      if(m_grip.isGripperOpen()){
-        m_grip.close();
-      }
-      else{
-        m_grip.open();
-      }
-    }
-    else {
-      System.out.println("----------GRIPPER NOT OPENING ------> OUT OF OPENING BOUNDS---------");
-    }
+    m_grip.toggleGripperSolenoids();
+    //if(m_arm.getTargetPosition()<ArmPhysicalConstants.maxArmValue && m_arm.getTargetPosition()>ArmPhysicalConstants.minArmValue+ArmPhysicalConstants.minOpenGripThreshold){
+      // if(m_grip.isGripperOpen()){
+      //   m_grip.close();
+      // }
+      // else{
+      //   m_grip.open();
+      // }
+    //}
+    //else {
+    //   System.out.println("----------GRIPPER NOT OPENING ------> OUT OF OPENING BOUNDS---------");
+    // }
   }
 }

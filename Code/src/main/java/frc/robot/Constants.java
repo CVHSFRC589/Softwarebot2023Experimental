@@ -23,12 +23,12 @@ public final class Constants {
     public static final double kStatic = 0.16935;// min amount of voltage???
     public static final int kGripperForward = 0;
     public static final int kGripperReverse = 1;
-    public static final int kArmMotorPort = 12;// 12;//50
+    public static final int kArmMotorPort = 50;// 12;//50
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
-    public static final int kWristPort = 40;
+    public static final int kWristPort = 40;//40
 
     public static final int kLeftMotorPort = 11;// 11
-    public static final int kRightMotorPort = 50;// 12;
+    public static final int kRightMotorPort = 12;// 12;
     
     public static final int kLeftMotorPort2 = 13;// 11
     public static final int kRightMotorPort2 = 14;// 12;
@@ -74,7 +74,7 @@ public final class Constants {
     public static final double WRIST_ENCODER_TO_DEG = 5.7;
     public static final int maxDriveAmps = 35;
     public static final int DRIVE_WHEEL_RADIUS = 3;
-    public static final double ARM_GEAR_RATIO = 1.76;//.01;
+    public static final double ARM_GEAR_RATIO = .01;//.01;
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
 
     public static final double DRIVE_WHEEL_CIRCUM = 2 * Math.PI * DRIVE_WHEEL_RADIUS;

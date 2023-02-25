@@ -27,8 +27,8 @@ import frc.robot.Constants.PhysicalConstants;
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
   private SparkMaxPIDController m_PIDController;
-  // private SparkMaxLimitSwitch m_upperlimitswitch;
-  // private SparkMaxLimitSwitch m_lowerlimitswitch;
+  private SparkMaxLimitSwitch m_upperlimitswitch;
+  private SparkMaxLimitSwitch m_lowerlimitswitch;
   private RelativeEncoder m_encoder;
   private double m_clampedPosition;
   private double m_currentPosition;
@@ -42,11 +42,10 @@ public class ArmSubsystem extends SubsystemBase {
     m_currentPosition = m_encoder.getPosition();
     m_fixedposition = false;
     m_clampedPosition = 0;
+    m_motor.setInverted(true);
 
-    // m_upperlimitswitch =
-    // m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    // m_lowerlimitswitch =
-    // m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
     // resetEncoders();
 
@@ -86,7 +85,9 @@ public class ArmSubsystem extends SubsystemBase {
   public double getEncoderInches() {
     return m_encoder.getPosition();
   }
-
+  public double getEncoderDeg() {
+    return m_encoder.getPosition()*360;
+  }
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
@@ -126,7 +127,7 @@ public class ArmSubsystem extends SubsystemBase {
     return m_fixedposition;
 
   }
-
+  
   public void canceledFixedPositionMode(){
     System.out.println("-----------------CANCLED FIXED POS-----------------------");
     m_fixedposition = false;
@@ -152,11 +153,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // System.out.println("--------------------" + (getEncoderInches()>=m_clampedPosition));
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
     SmartDashboard.putBoolean("Fixed pos?", m_fixedposition);
+    if(m_lowerlimitswitch.isPressed()){
+      m_encoder.setPosition(0);
+    }
     // SmartDashboard.putBoolean("Upper limit Switch",
     // m_upperlimitswitch.isPressed());
     // SmartDashboard.putBoolean("Lower limit Switch",

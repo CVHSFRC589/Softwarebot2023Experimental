@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Compressor;
 public class GripperSubsystem extends SubsystemBase {
 private double m_currentPosition;
 private DoubleSolenoid m_gripper;
-private Compressor m_compressor;
+//private Compressor m_compressor;
 private NetworkTable m_table;
 private NetworkTableEntry m_pattern;
 private NetworkTableEntry m_patternOver;
@@ -26,8 +26,8 @@ private NetworkTableEntry m_patternOver;
   /** Creates a new GripperSubsystem. */
   public GripperSubsystem() {
     m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kGripperForward, IDConstants.kGripperReverse); //new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
-    m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-    m_compressor.enableAnalog(0, 0);
+    //m_compressor = new Compressor(PneumaticsModuleType.REVPH);
+    //m_compressor.enableAnalog(0, 0);
     
     m_table = NetworkTableInstance.getDefault().getTable(LEDConstants.NETWORK_TABLE_NAME);
     m_patternOver = m_table.getEntry(LEDConstants.PATTERN_FINISHED_ENTRY_NAME);
@@ -72,7 +72,7 @@ private NetworkTableEntry m_patternOver;
 
   @Override
   public void periodic() {
-    SmartDashboard.putData(m_compressor);
+    //SmartDashboard.putData(m_compressor);
     SmartDashboard.putData(m_gripper);
     // This method will be called once per scheduler run
   }

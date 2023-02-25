@@ -137,6 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation){
     //if true run arcade drive
     // System.out.println("------------"+ m_driveType.getAsBoolean()+"----------");
+    //m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
     m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
     // if(m_driveType.getAsBoolean()){
       

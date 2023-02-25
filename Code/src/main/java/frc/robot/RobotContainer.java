@@ -16,41 +16,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.ArmPhysicalConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ArmStayInPlace;
-import frc.robot.commands.ArmCancelFixedPosition;
-import frc.robot.commands.ArmFollowJoy;
-import frc.robot.commands.ArmMoveAndLock;
-import frc.robot.commands.ArmSetPosition;
-import frc.robot.commands.AutoGrip;
-import frc.robot.commands.CloseGripper;
-import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.DriveAndBalance;
-import frc.robot.commands.DriveDistance;
-import frc.robot.commands.DriveVoltage;
-import frc.robot.commands.HalveDriveSpeed;
-import frc.robot.commands.OpenGripper;
-import frc.robot.commands.PIDLockInPlace;
-import frc.robot.commands.PigeonBalance;
-import frc.robot.commands.PigeonBalanceSmartVelocity;
-import frc.robot.commands.QuarterDriveSpeed;
-import frc.robot.commands.SetDriveMode;
-import frc.robot.commands.SmoothDrive;
-import frc.robot.commands.ToggleGripper;
-import frc.robot.commands.TurnDeg;
-import frc.robot.commands.TurnDegGyro;
-import frc.robot.commands.UpdateAllianceColor;
-import frc.robot.commands.WristSetSpeed;
-import frc.robot.commands.Auto_Pattern.ChangeArmPos;
-import frc.robot.commands.Auto_Pattern.ComplexAuto;
-import frc.robot.commands.Auto_Pattern.Obstacle;
-import frc.robot.commands.Auto_Pattern.RealComplexAuto;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.VisualFeedbackSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.commands.*;
+import frc.robot.commands.Auto_Pattern.*;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,8 +31,19 @@ import frc.robot.subsystems.WristSubsystem;
  * periodic methods (other than the scheduler calls). Instead, the structure of
  * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
- * //
+ * 
  */
+
+
+ // ==========================================TODO LIST==========================================
+        /* add logic to arm clamps
+         * same logic to wrist and mindful of arm position(are there dangerous wrist positions???)
+         * 
+         * 
+         * 
+        */
+        // ====================================================================================
+
 public class RobotContainer {
         // camera
         UsbCamera camera = CameraServer.startAutomaticCapture();
@@ -104,7 +86,7 @@ public class RobotContainer {
                 // Configure default commands
                 // Set the default drive command to split-stick arcade drive
 
-                m_wrist.setDefaultCommand(new WristSetSpeed(m_wrist, () -> m_driverJoyStick1.getRawAxis(3)));
+                m_wrist.setDefaultCommand(new WristStayInPlace(m_wrist, () -> m_wrist.getWristDeg()));
 
                 m_robotDrive.setDefaultCommand(
                                 new DefaultDrive(
@@ -123,7 +105,7 @@ public class RobotContainer {
                 m_robotArm.setDefaultCommand(
                                 new ArmFollowJoy(m_robotArm, 
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
-                                                () -> -m_operatorJoyStick.getRawAxis(2)));
+                                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
                 
                 // m_robotArm.setDefaultCommand(
                 //                 new ArmMoveAndLock(m_robotArm,m_operatorJoyStick
@@ -131,8 +113,8 @@ public class RobotContainer {
                 //                                 // () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)
                 //                                 ));
 
-                m_robotGripper.setDefaultCommand(
-                                new AutoGrip(m_robotGripper, m_robotArm));
+                // m_robotGripper.setDefaultCommand(
+                //                 new AutoGrip(m_robotGripper, m_robotArm));
 
                 m_chooser.setDefaultOption("Complex Auto", m_complexAuto);
                 m_chooser.addOption("Real Complex Auto", m_realcomplexAuto);
@@ -173,6 +155,10 @@ public class RobotContainer {
                 new JoystickButton(m_driverJoyStick1, 3)
                                 .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
 
+                new JoystickButton(m_driverJoyStick1, 4)
+                                .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
+
+
                 // =====================================================================================================
 
                 // ==========================================OPERATOR CONTROLS==========================================
@@ -182,6 +168,7 @@ public class RobotContainer {
 
                 // new POVButton(m_operatorJoyStick, 180)
                 //                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
+
 
                 //MAX ARM VALUE GO TO MAX HEIGHT
                 new JoystickButton(m_operatorJoyStick, 1)
@@ -197,12 +184,26 @@ public class RobotContainer {
                                 .toggleOnTrue(new ArmSetPosition(m_robotArm, m_robotArm.getTargetPosition()));
                 //wrist 
                 new POVButton(m_operatorJoyStick, 0)
-                                .onTrue(new WristSetSpeed(m_wrist, () -> 1));
+                                .whileTrue(new WristSetSpeed(m_wrist, () -> .5));
+                                new POVButton(m_operatorJoyStick, 180)
+                                .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
 
+                                        //==============ARM + WRIST PRESETS==============\\
+                                        new JoystickButton(m_operatorJoyStick, 5)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 5));
+                                new JoystickButton(m_operatorJoyStick, 6)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cone));
+                                new JoystickButton(m_operatorJoyStick, 7)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cube));
+                                new JoystickButton(m_operatorJoyStick, 8)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.levelportal));
+                                new JoystickButton(m_operatorJoyStick, 9)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.levelfloor));
+                                new JoystickButton(m_operatorJoyStick, 10)
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level1conecube));
                 // =======================================================================================================
 
-                // ==========================================DEBUGING
-                // CONTROLS==========================================
+                // ==========================================DEBUGING CONTROLS==========================================
                 // While holding the shoulder button, drive at half speed
                 // kX = button b
                 // kA = button x
