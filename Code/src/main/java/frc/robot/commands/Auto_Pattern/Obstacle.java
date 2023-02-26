@@ -5,8 +5,8 @@
 package frc.robot.commands.Auto_Pattern;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.DriveDistance;
-import frc.robot.commands.TurnDeg;
+import frc.robot.commands.COMMAND_DRIVE.DriveDistance;
+import frc.robot.commands.COMMAND_DRIVE.TurnDeg;
 import frc.robot.subsystems.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

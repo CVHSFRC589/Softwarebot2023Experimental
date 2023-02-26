@@ -19,8 +19,22 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ArmPhysicalConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.*;
+// import frc.robot.commands.*;
 import frc.robot.commands.Auto_Pattern.*;
+import frc.robot.commands.COMMAND_ARM.*;
+// import frc.robot.commands.COMMAND_ARM.ArmFollowJoy;
+// import frc.robot.commands.COMMAND_ARM.ArmSetPosition;
+import frc.robot.commands.COMMAND_DRIVE.*;
+import frc.robot.commands.COMMAND_GRIP.CloseGripper;
+import frc.robot.commands.COMMAND_GRIP.OpenGripper;
+// import frc.robot.commands.COMMAND_DRIVE.DriveDefault;
+// import frc.robot.commands.COMMAND_DRIVE.DriveAndBalance;
+// import frc.robot.commands.COMMAND_DRIVE.DriveSelectSpeed;
+// import frc.robot.commands.COMMAND_DRIVE.SetDriveMode;
+import frc.robot.commands.COMMAND_GRIP.ToggleGripper;
+import frc.robot.commands.COMMAND_MISC.UpdateAllianceColor;
+import frc.robot.commands.COMMAND_WRIST.WristSetSpeed;
+import frc.robot.commands.COMMAND_WRIST.WristStayInPlace;
 import frc.robot.subsystems.*;
 
 /**
@@ -89,7 +103,7 @@ public class RobotContainer {
                 m_wrist.setDefaultCommand(new WristStayInPlace(m_wrist, () -> m_wrist.getWristDeg()));
 
                 m_robotDrive.setDefaultCommand(
-                                new DefaultDrive(
+                                new DriveDefault(
                                                 m_robotDrive,
                                                 () -> -m_driverJoyStick1.getRawAxis(OIConstants.kYaxis),
                                                 () -> -m_driverJoyStick2.getRawAxis(OIConstants.kYaxis),
@@ -105,7 +119,7 @@ public class RobotContainer {
                 m_robotArm.setDefaultCommand(
                                 new ArmFollowJoy(m_robotArm, 
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
-                                                () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
+                                                () -> -m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
                 
                 // m_robotArm.setDefaultCommand(
                 //                 new ArmMoveAndLock(m_robotArm,m_operatorJoyStick
@@ -145,18 +159,18 @@ public class RobotContainer {
                 // ==========================================DRIVER CONTROLS==========================================
 
                 // DRIVE AND BALANCE
-                new JoystickButton(m_driverJoyStick1, 1)
+                new JoystickButton(m_driverJoyStick1, 11)
                                 .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
 
                 // QUARTER SPEED
-                new JoystickButton(m_driverJoyStick1, 2)
-                                .toggleOnTrue(new QuarterDriveSpeed(m_robotDrive));
+                new JoystickButton(m_driverJoyStick1, 10)
+                                .toggleOnTrue(new DriveSelectSpeed(m_robotDrive, .75));
                 //TOGGLE GRIPPER
                 new JoystickButton(m_driverJoyStick1, 3)
-                                .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
+                                .onTrue(new OpenGripper(m_robotGripper, m_robotArm));
 
                 new JoystickButton(m_driverJoyStick1, 4)
-                                .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
+                                .onTrue(new CloseGripper(m_robotGripper, m_robotArm));
 
 
                 // =====================================================================================================
@@ -182,19 +196,26 @@ public class RobotContainer {
                 //LOCK ARM IN PLACE
                 new JoystickButton(m_operatorJoyStick, 3)
                                 .toggleOnTrue(new ArmSetPosition(m_robotArm, m_robotArm.getTargetPosition()));
+                
+                new JoystickButton(m_operatorJoyStick, 12)
+                                .toggleOnTrue(new ArmZeroEncoder(m_robotArm));
                 //wrist 
                 new POVButton(m_operatorJoyStick, 0)
-                                .whileTrue(new WristSetSpeed(m_wrist, () -> .5));
+                                .whileTrue(new WristSetSpeed(m_wrist, () -> -.5));
                                 new POVButton(m_operatorJoyStick, 180)
-                                .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
+                                .whileTrue(new WristSetSpeed(m_wrist, () -> 0.5));
 
                                         //==============ARM + WRIST PRESETS==============\\
                                         new JoystickButton(m_operatorJoyStick, 5)
                                         .toggleOnTrue(new ArmSetPosition(m_robotArm, 5));
+                                // new JoystickButton(m_operatorJoyStick, 6)
+                                //         .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cone));
+                                // new JoystickButton(m_operatorJoyStick, 7)
+                                //         .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cube));
                                 new JoystickButton(m_operatorJoyStick, 6)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cone));
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 0.05));
                                 new JoystickButton(m_operatorJoyStick, 7)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cube));
+                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 0.15));
                                 new JoystickButton(m_operatorJoyStick, 8)
                                         .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.levelportal));
                                 new JoystickButton(m_operatorJoyStick, 9)
@@ -223,8 +244,8 @@ public class RobotContainer {
                 // new JoystickButton(m_driverController, Button.kRightBumper.value)
                 // .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
 
-                // new JoystickButton(m_driverController, Button.kRightBumper.value)
-                // .toggleOnTrue(new PigeonBalanceSmartVelocity(m_robotDrive));
+                new JoystickButton(m_driverJoyStick1, 11)
+                .toggleOnTrue(new DriveAndBalance(m_robotDrive));
 
                 // new JoystickButton(m_driverController, OIConstants.kButtonY)
                 // .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));

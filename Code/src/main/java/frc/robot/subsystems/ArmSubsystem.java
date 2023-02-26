@@ -10,8 +10,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
@@ -43,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_fixedposition = false;
     m_clampedPosition = 0;
     m_motor.setInverted(true);
+    m_motor.setIdleMode(IdleMode.kBrake);
 
     m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -64,30 +65,37 @@ public class ArmSubsystem extends SubsystemBase {
     // max and min values??
 
     // THESE do NOT change anything....
-    m_PIDController.setPositionPIDWrappingEnabled(true);
-    m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
-    m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
+    // m_PIDController.setPositionPIDWrappingEnabled(true);
+    // m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
+    // m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
     // m_upperlimitswitch.enableLimitSwitch(true);
 
+  }
+  // ==========================================SENSOR METHODS========================================== \\
+
+  public double getEncoderDeg() {
+    return m_encoder.getPosition()*360;
+  }
+  
+  public boolean isLowerLimitSwitchPressed(){
+    return m_lowerlimitswitch.isPressed();
+  }
+  public boolean isUpperLimitSwitchPressed(){
+    return m_upperlimitswitch.isPressed();
   }
 
   public void resetEncoders() {
     m_encoder.setPosition(0);
   }
-  // public boolean checkUpperLimitSwitch(){
-  // return m_upperlimitswitch.isPressed();
-  // }
-
-  // public boolean checkLowerLimitSwitch(){
-  // return m_lowerlimitswitch.isPressed();
-  // }
+ 
 
   public double getEncoderInches() {
     return m_encoder.getPosition();
   }
-  public double getEncoderDeg() {
-    return m_encoder.getPosition()*360;
-  }
+
+  
+
+  
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
@@ -120,7 +128,7 @@ public class ArmSubsystem extends SubsystemBase {
     
   }
   public void setVelocityArm(double velocity){
-    System.out.println(velocity);
+    // System.out.println(velocity);
     m_PIDController.setReference(velocity, ControlType.kVelocity, ArmPIDConstants.defaultSlot);
   }
   public boolean isInFixedPositionMode(){
@@ -129,7 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
   
   public void canceledFixedPositionMode(){
-    System.out.println("-----------------CANCLED FIXED POS-----------------------");
+    // System.out.println("-----------------CANCLED FIXED POS-----------------------");
     m_fixedposition = false;
   }
 
@@ -157,6 +165,7 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
     SmartDashboard.putBoolean("Fixed pos?", m_fixedposition);
+    SmartDashboard.putNumber("ARM DEG", getEncoderDeg());
     if(m_lowerlimitswitch.isPressed()){
       m_encoder.setPosition(0);
     }

@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -76,7 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor = new CANSparkMax(IDConstants.kRightMotorPort, MotorType.kBrushless);
     m_leftMotor2 = new CANSparkMax(IDConstants.kLeftMotorPort2, MotorType.kBrushless);
     m_rightMotor2 = new CANSparkMax(IDConstants.kRightMotorPort2, MotorType.kBrushless);
-    
+    // m_leftMotor2.setIdleMode(IdleMode.kCoast);
+    // m_rightMotor2.setIdleMode(IdleMode.kCoast);
     m_leftMotor2.follow(m_leftMotor);
     m_rightMotor2.follow(m_rightMotor);
 
@@ -98,7 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMotor.setIdleMode(IdleMode.kBrake);
     m_rightMotor.setIdleMode(IdleMode.kBrake);
     m_leftMotor.setInverted(false);
-    m_rightMotor.setInverted(false);
+    m_rightMotor.setInverted(true);
     m_leftEncoder.setPositionConversionFactor(1.76);
     m_rightEncoder.setPositionConversionFactor(1.76);
 
@@ -137,8 +138,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(DoubleSupplier y1, DoubleSupplier y2, DoubleSupplier rotation){
     //if true run arcade drive
     // System.out.println("------------"+ m_driveType.getAsBoolean()+"----------");
-    //m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
-    m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
+    m_drive.tankDrive(y1.getAsDouble(), y2.getAsDouble());
+    // m_drive.arcadeDrive(y1.getAsDouble(), rotation.getAsDouble());
     // if(m_driveType.getAsBoolean()){
       
     //   System.out.println("------------"+ y1.getAsDouble()+"----------");
@@ -153,7 +154,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setDriveMode(boolean arcade){
     m_driveType = () -> arcade;
-    System.out.println("--------------"+m_driveType+"------------");
+    // System.out.println("--------------"+m_driveType+"------------");
   }
 
   public void cancelPIDMode() {
