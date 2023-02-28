@@ -1,0 +1,13 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/DriveSubsystem": "Subsystem",
+      "/SmartDashboard/Pigeon 2 [60]": "Gyro",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
+      "/SmartDashboard/UpdateAllianceColor": "Command"
+    }
+  }
+}

@@ -33,6 +33,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_clampedPosition;
   private double m_currentPosition;
   private boolean m_fixedposition;
+
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_motor = new CANSparkMax(IDConstants.kArmMotorPort, MotorType.kBrushless);
@@ -45,8 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_motor.setInverted(true);
     m_motor.setIdleMode(IdleMode.kBrake);
 
-    m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
     // resetEncoders();
 
@@ -62,40 +63,55 @@ public class ArmSubsystem extends SubsystemBase {
     m_PIDController.setIZone(ArmPIDConstants.kIz, 0);
     m_PIDController.setFF(ArmPIDConstants.kFF, 0);
 
+
+
+    m_PIDController.setSmartMotionMaxVelocity(ArmPIDConstants.maxVelSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionMinOutputVelocity(ArmPIDConstants.minVelSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionMaxAccel(ArmPIDConstants.maxAccSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionAllowedClosedLoopError(ArmPIDConstants.allowedErrSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal,  ArmPIDConstants.smartMotionSlot);
+
+    m_PIDController.setP(ArmPIDConstants.kPSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setI(ArmPIDConstants.kISM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setD(ArmPIDConstants.kDSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setIZone(ArmPIDConstants.kIzSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setFF(ArmPIDConstants.kFFSM,  ArmPIDConstants.smartMotionSlot);
+
+    
+
     // max and min values??
 
     // THESE do NOT change anything....
     // m_PIDController.setPositionPIDWrappingEnabled(true);
     // m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
     // m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
-    // m_upperlimitswitch.enableLimitSwitch(true);
+    m_upperlimitswitch.enableLimitSwitch(true);
+    m_lowerlimitswitch.enableLimitSwitch(true);
 
   }
-  // ==========================================SENSOR METHODS========================================== \\
+  // ==========================================SENSOR
+  // METHODS========================================== \\
 
   public double getEncoderDeg() {
-    return m_encoder.getPosition()*360;
+    return m_encoder.getPosition() * 360;
   }
-  
-  public boolean isLowerLimitSwitchPressed(){
+
+  public boolean isLowerLimitSwitchPressed() {
     return m_lowerlimitswitch.isPressed();
   }
-  public boolean isUpperLimitSwitchPressed(){
+
+  public boolean isUpperLimitSwitchPressed() {
     return m_upperlimitswitch.isPressed();
   }
 
   public void resetEncoders() {
     m_encoder.setPosition(0);
   }
- 
 
   public double getEncoderInches() {
     return m_encoder.getPosition();
   }
 
-  
-
-  
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
@@ -123,41 +139,40 @@ public class ArmSubsystem extends SubsystemBase {
   public void setArmPosition(double position) {
     m_fixedposition = true;
     // limit position to safe values
-    // m_clampedPosition = clampValue(position);
-    m_PIDController.setReference(position, ControlType.kSmartMotion);
-    
+    // m_clampedPosition = clampValue(position);SM
+    m_PIDController.setReference(position/360, ControlType.kSmartMotion, ArmPIDConstants.smartMotionSlot);
+
   }
-  public void setVelocityArm(double velocity){
+
+  public void setVelocityArm(double velocity) {
     // System.out.println(velocity);
     m_PIDController.setReference(velocity, ControlType.kVelocity, ArmPIDConstants.defaultSlot);
   }
-  public boolean isInFixedPositionMode(){
+
+  public boolean isInFixedPositionMode() {
     return m_fixedposition;
 
   }
-  
-  public void canceledFixedPositionMode(){
-    // System.out.println("-----------------CANCLED FIXED POS-----------------------");
+
+  public void canceledFixedPositionMode() {
+    // System.out.println("-----------------CANCLED FIXED
+    // POS-----------------------");
     m_fixedposition = false;
   }
 
-  public boolean isInPosition(double position){
-    
+  public boolean isInPosition(double position) {
+
     position = clampValue(position);
-    if(getEncoderInches()>=position){
-      
+    if (getEncoderInches() >= position) {
+
       // m_fixedposition = false;
 
       return true;
-    }
-    else{
+    } else {
       return false;
     }
-    
-  }
-  
 
-  
+  }
 
   @Override
   public void periodic() {
@@ -166,13 +181,15 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
     SmartDashboard.putBoolean("Fixed pos?", m_fixedposition);
     SmartDashboard.putNumber("ARM DEG", getEncoderDeg());
-    if(m_lowerlimitswitch.isPressed()){
+    SmartDashboard.putNumber("ARM AMP", m_motor.getOutputCurrent());
+    SmartDashboard.putBoolean("Upper limit Switch",
+        m_upperlimitswitch.isPressed());
+    SmartDashboard.putBoolean("Lower limit Switch",
+        m_lowerlimitswitch.isPressed());
+    if (m_lowerlimitswitch.isPressed()) {
       m_encoder.setPosition(0);
     }
-    // SmartDashboard.putBoolean("Upper limit Switch",
-    // m_upperlimitswitch.isPressed());
-    // SmartDashboard.putBoolean("Lower limit Switch",
-    // m_lowerlimitswitch.isPressed());
+    
     // This method will be called on ce per scheduler run
   }
 }

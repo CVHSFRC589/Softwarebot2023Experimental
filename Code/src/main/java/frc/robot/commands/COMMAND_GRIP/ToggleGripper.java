@@ -25,9 +25,9 @@ public class ToggleGripper extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_arm.getEncoderDeg()>25){
+    // if(m_arm.getEncoderDeg()>25){
       m_grip.toggleGripperSolenoids();
-    }
+    // }
     
     //if(m_arm.getTargetPosition()<ArmPhysicalConstants.maxArmValue && m_arm.getTargetPosition()>ArmPhysicalConstants.minArmValue+ArmPhysicalConstants.minOpenGripThreshold){
       // if(m_grip.isGripperOpen()){

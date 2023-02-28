@@ -18,7 +18,7 @@ public class DriveAndBalance extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new DriveDistance(distance, .65 ,drive),
+    new DriveDistance(distance, .40 ,drive),
     new PigeonBalanceSmartVelocity(drive),
     new PIDLockInPlace(drive, 0)
     );

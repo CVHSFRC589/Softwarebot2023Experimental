@@ -7,38 +7,47 @@ package frc.robot.commands.COMMAND_ARM;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmGoToLowerLimitSwitch extends CommandBase {
-  /** Creates a new ArmGoToLowerLimitSwitch. */
-  private ArmSubsystem m_arm;
-  public ArmGoToLowerLimitSwitch(ArmSubsystem arm) {
-    addRequirements(arm);
+public class ArmSetPosVelocity extends CommandBase {
+  /** Creates a new ArmSetPosVelocity. */
+  private final ArmSubsystem m_arm;
+  private final double m_degrees;
+
+  public ArmSetPosVelocity(ArmSubsystem arm, double degrees) {
     m_arm = arm;
+    m_degrees = degrees;
+    addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.setVelocityArm(-589);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setVelocityArm(-589);
+    if (m_degrees < m_arm.getEncoderDeg()) {
+      m_arm.setVelocityArm(-1000);
+    } else {
+      m_arm.setVelocityArm(1000);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.resetEncoders();
-    m_arm.setVelocityArm(0);
+    m_arm.setArmPosition(m_degrees);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // return m_arm.isLowerLimitSwitchPressed();
+    if (m_arm.getEncoderDeg() <= m_degrees + .5 &&
+        m_arm.getEncoderDeg() >= m_degrees - .5) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

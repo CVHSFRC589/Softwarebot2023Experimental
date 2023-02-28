@@ -161,16 +161,23 @@ public class RobotContainer {
                 // DRIVE AND BALANCE
                 new JoystickButton(m_driverJoyStick1, 11)
                                 .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
-
-                // QUARTER SPEED
+                // LOCK 
                 new JoystickButton(m_driverJoyStick1, 10)
+                                .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 0));
+                
+                // 75% SPEED
+                new JoystickButton(m_driverJoyStick1, 6)
                                 .toggleOnTrue(new DriveSelectSpeed(m_robotDrive, .75));
-                //TOGGLE GRIPPER
-                new JoystickButton(m_driverJoyStick1, 3)
-                                .onTrue(new OpenGripper(m_robotGripper, m_robotArm));
+                // 50% SPEED
+                new JoystickButton(m_driverJoyStick1, 7)
+                                .toggleOnTrue(new DriveSelectSpeed(m_robotDrive, .50));
 
-                new JoystickButton(m_driverJoyStick1, 4)
-                                .onTrue(new CloseGripper(m_robotGripper, m_robotArm));
+                //TOGGLE GRIPPER
+                new JoystickButton(m_driverJoyStick2, 1)//Make seperate area for joystick 2
+                                .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
+
+                // new JoystickButton(m_driverJoyStick1, 4)
+                //                 .onTrue(new CloseGripper(m_robotGripper, m_robotArm));
 
 
                 // =====================================================================================================
@@ -186,42 +193,30 @@ public class RobotContainer {
 
                 //MAX ARM VALUE GO TO MAX HEIGHT
                 new JoystickButton(m_operatorJoyStick, 1)
-                                .toggleOnTrue(new ArmSetPosition(m_robotArm, 50));
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
                 //MIN ARM VALUE GO TO BASE/INSIDE
                 new JoystickButton(m_operatorJoyStick, 2)
-                                .toggleOnTrue(new ArmSetPosition(m_robotArm, -50));
+                                .toggleOnTrue(new ArmPIDLock(m_robotArm));
+
+                new JoystickButton(m_operatorJoyStick, 3)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 105));
                 //CANCEL FIXED POSITION - RETURN TO JOYSTICK FOLLOW
                 new JoystickButton(m_operatorJoyStick, 4)
-                                .toggleOnTrue(new ArmCancelFixedPosition(m_robotArm));
-                //LOCK ARM IN PLACE
-                new JoystickButton(m_operatorJoyStick, 3)
-                                .toggleOnTrue(new ArmSetPosition(m_robotArm, m_robotArm.getTargetPosition()));
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelfloor));
+                new JoystickButton(m_operatorJoyStick, 5)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cube));
+                // new JoystickButton(m_operatorJoyStick, 4)
+                //                 .toggleOnTrue(new ArmCancelFixedPosition(m_robotArm));
+                // //LOCK ARM IN PLACE
+                
                 
                 new JoystickButton(m_operatorJoyStick, 12)
                                 .toggleOnTrue(new ArmZeroEncoder(m_robotArm));
                 //wrist 
-                new POVButton(m_operatorJoyStick, 0)
-                                .whileTrue(new WristSetSpeed(m_wrist, () -> -.5));
-                                new POVButton(m_operatorJoyStick, 180)
+                new JoystickButton(m_operatorJoyStick, 9)
+                                .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
+                new JoystickButton(m_operatorJoyStick, 10)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> 0.5));
-
-                                        //==============ARM + WRIST PRESETS==============\\
-                                        new JoystickButton(m_operatorJoyStick, 5)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 5));
-                                // new JoystickButton(m_operatorJoyStick, 6)
-                                //         .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cone));
-                                // new JoystickButton(m_operatorJoyStick, 7)
-                                //         .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level2cube));
-                                new JoystickButton(m_operatorJoyStick, 6)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 0.05));
-                                new JoystickButton(m_operatorJoyStick, 7)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, 0.15));
-                                new JoystickButton(m_operatorJoyStick, 8)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.levelportal));
-                                new JoystickButton(m_operatorJoyStick, 9)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.levelfloor));
-                                new JoystickButton(m_operatorJoyStick, 10)
-                                        .toggleOnTrue(new ArmSetPosition(m_robotArm, ArmPhysicalConstants.level1conecube));
                 // =======================================================================================================
 
                 // ==========================================DEBUGING CONTROLS==========================================
@@ -244,8 +239,8 @@ public class RobotContainer {
                 // new JoystickButton(m_driverController, Button.kRightBumper.value)
                 // .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
 
-                new JoystickButton(m_driverJoyStick1, 11)
-                .toggleOnTrue(new DriveAndBalance(m_robotDrive));
+                // new JoystickButton(m_driverJoyStick1, 11)
+                // .toggleOnTrue(new DriveAndBalance(m_robotDrive));
 
                 // new JoystickButton(m_driverController, OIConstants.kButtonY)
                 // .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));

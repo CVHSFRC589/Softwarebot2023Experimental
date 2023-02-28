@@ -60,6 +60,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double minVelsv = 0;
   private double maxAccsv = 3500;
   private double allowedErrsv = 0.5;
+  private double m_maxoutput;
 
   // The robot's drive
   private DifferentialDrive m_drive;
@@ -411,10 +412,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double pitchAdjustVelocity() {
     if(m_pigeon2.getPitch() > 3){
-      return m_pigeon2.getPitch() * -100;
+      return m_pigeon2.getPitch() * -60;
     }
     else if(m_pigeon2.getPitch() < -3){
-      return m_pigeon2.getPitch() * -100;
+      return m_pigeon2.getPitch() * -60;
     }
     else{
       return 0;
@@ -454,6 +455,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param maxOutput the maximum output to which the drive will be constrained
    */
   public void setMaxOutput(double maxOutput) {
+    m_maxoutput = maxOutput;
     m_drive.setMaxOutput(maxOutput);
   }
    // for finding the distance from the range finder
@@ -476,6 +478,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
       SmartDashboard.putNumber("Encoder Abs Avg", getAbsAverageEncoderDistance());
       SmartDashboard.putNumber("Dist From Wall", getRangeFinderDistance());
+      SmartDashboard.putNumber("DRIVE SPEED", m_maxoutput);
       //SmartDashboard.putData(navx);
       //SmartDashboard.putNumber("Navx Pitch",navx.getPitch());
       // SmartDashboard.putNumber("Encoder Abs Avg", getAbsAverageEncoderDistance());

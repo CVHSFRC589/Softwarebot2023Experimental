@@ -7,38 +7,32 @@ package frc.robot.commands.COMMAND_ARM;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmGoToLowerLimitSwitch extends CommandBase {
-  /** Creates a new ArmGoToLowerLimitSwitch. */
+public class ArmPIDLock extends CommandBase {
   private ArmSubsystem m_arm;
-  public ArmGoToLowerLimitSwitch(ArmSubsystem arm) {
-    addRequirements(arm);
+  /** Creates a new ArmPIDLock. */
+  public ArmPIDLock(ArmSubsystem arm) {
     m_arm = arm;
+    addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_arm.setVelocityArm(-589);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setVelocityArm(-589);
+    m_arm.setArmPosition(m_arm.getEncoderDeg());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_arm.resetEncoders();
-    m_arm.setVelocityArm(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
-    // return m_arm.isLowerLimitSwitchPressed();
   }
 }

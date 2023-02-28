@@ -119,8 +119,8 @@ public final class Constants {
     public static final int smartVelocitySlot = 2;
 
     public static final double kP = 0.0003;
-    public static final double kI = 0.000000;
-    public static final double kD = 0.0000000;
+    public static final double kI = 0;
+    public static final double kD = 0;
     public static final double kIz = 0;
     public static final double kFF = 0;
     public static final double kMaxOutput = 1;
@@ -128,18 +128,29 @@ public final class Constants {
     public static final double maxRPM = 1000;
     public static final double maxVel = 4500;
     public static final double minVel = 0;
-    public static final double maxAcc = 3000;
-    public static final double allowedErr = .5;
-    public static final double PIDWrappingMaxInput = 30;
-    public static final double PIDWrappingMinInput = 5;
+    public static final double maxAcc = 2000;
+    public static final double allowedErr = 0.0056;
+
+    public static final double kPSM = 0.0012;
+    public static final double kDSM = 0;
+    public static final double kISM = 0;
+    public static final double kIzSM = 0;
+    public static final double kFFSM = 0;
+    public static final double kMaxOutputSM = 1;
+    public static final double kMinOutputSM = -1;
+    public static final double maxRPMSM = 2000;
+    public static final double maxVelSM = 4000;
+    public static final double minVelSM = 0;
+    public static final double maxAccSM = 4000;
+    public static final double allowedErrSM = 0.0056;
   }
 
   public static final class ArmPhysicalConstants {
-    public static final double level2cone = 20;
-    public static final double level2cube = 17;
+    public static final double level2cone = 80;
+    public static final double level2cube = 80;
     public static final double levelportal = 15;
-    public static final double level1conecube = 10;
-    public static final double levelfloor = 13;
+    public static final double level1conecube = 30;
+    public static final double levelfloor = 30;
 
     public static final int maxArmAmp = 35;
     public static final double maxArmValue = 31;
