@@ -33,6 +33,7 @@ import frc.robot.commands.COMMAND_GRIP.OpenGripper;
 // import frc.robot.commands.COMMAND_DRIVE.SetDriveMode;
 import frc.robot.commands.COMMAND_GRIP.ToggleGripper;
 import frc.robot.commands.COMMAND_MISC.UpdateAllianceColor;
+import frc.robot.commands.COMMAND_WRIST.WristIncrementPosition;
 import frc.robot.commands.COMMAND_WRIST.WristSetSpeed;
 import frc.robot.commands.COMMAND_WRIST.WristStayInPlace;
 import frc.robot.subsystems.*;
@@ -187,34 +188,36 @@ public class RobotContainer {
                 // new POVButton(m_operatorJoyStick, 0)
                 // .whileTrue(new ChangeArmPos(.5, m_robotArm));
 
-                // new POVButton(m_operatorJoyStick, 180)
-                //                 .whileTrue(new ChangeArmPos(-.5, m_robotArm));
-
-
-                //MAX ARM VALUE GO TO MAX HEIGHT
-                new JoystickButton(m_operatorJoyStick, 1)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
-                //MIN ARM VALUE GO TO BASE/INSIDE
-                new JoystickButton(m_operatorJoyStick, 2)
-                                .toggleOnTrue(new ArmPIDLock(m_robotArm));
-
-                new JoystickButton(m_operatorJoyStick, 3)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 105));
-                //CANCEL FIXED POSITION - RETURN TO JOYSTICK FOLLOW
-                new JoystickButton(m_operatorJoyStick, 4)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelfloor));
-                new JoystickButton(m_operatorJoyStick, 5)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cube));
-                // new JoystickButton(m_operatorJoyStick, 4)
-                //                 .toggleOnTrue(new ArmCancelFixedPosition(m_robotArm));
-                // //LOCK ARM IN PLACE
-                
-                
+                // ZERO ARM ENCODER
                 new JoystickButton(m_operatorJoyStick, 12)
                                 .toggleOnTrue(new ArmZeroEncoder(m_robotArm));
-                //wrist 
+                //LOCK ARM IN PLACE
+                new JoystickButton(m_operatorJoyStick, 2)
+                                .toggleOnTrue(new ArmPIDLock(m_robotArm));
+hio easan
+                //LEVEL MIN
+                new JoystickButton(m_operatorJoyStick, 1)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
+                //LEVEL MAX
+                new JoystickButton(m_operatorJoyStick, 3)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 105));
+                //LEVEL FLOOR 
+                new JoystickButton(m_operatorJoyStick, 4)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelfloor));
+                // LEVEL 2 CUBE
+                new JoystickButton(m_operatorJoyStick, 5)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cube));
+                // LEVEL 2 CONE
+                new JoystickButton(m_operatorJoyStick, 6)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cone));
+                //LEVEL LOAD
+                new JoystickButton(m_operatorJoyStick, 7)
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelportal));
+                
+                //WRIST UP
                 new JoystickButton(m_operatorJoyStick, 9)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
+                //WRIST DOWN
                 new JoystickButton(m_operatorJoyStick, 10)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> 0.5));
                 // =======================================================================================================
