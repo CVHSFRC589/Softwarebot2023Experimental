@@ -10,6 +10,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ArmGoToLowerLimitSwitch extends CommandBase {
   /** Creates a new ArmGoToLowerLimitSwitch. */
   private ArmSubsystem m_arm;
+
   public ArmGoToLowerLimitSwitch(ArmSubsystem arm) {
     addRequirements(arm);
     m_arm = arm;

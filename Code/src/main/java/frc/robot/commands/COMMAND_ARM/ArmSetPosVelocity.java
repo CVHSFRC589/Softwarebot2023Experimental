@@ -43,9 +43,9 @@ public class ArmSetPosVelocity extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (  (m_arm.getEncoderDeg() <= m_degrees + .5 &&
-          m_arm.getEncoderDeg() >= m_degrees - .5) &&
-          m_arm.isPistonOpen() ) {
+    if ((m_arm.getEncoderDeg() <= m_degrees + .5 &&
+        m_arm.getEncoderDeg() >= m_degrees - .5)) {//&&
+        //m_arm.isPistonOpen()) {
       return true;
     } else {
       return false;

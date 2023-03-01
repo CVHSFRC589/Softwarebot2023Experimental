@@ -15,8 +15,6 @@ public class ArmStayInPlace extends CommandBase {
   // private DoubleSupplier m_speed;
   // private DoubleSupplier m_speedmodifier;
 
-
-  
   /** Creates a new ArmMove. */
   public ArmStayInPlace(ArmSubsystem arm, DoubleSupplier position) {
     m_arm = arm;
@@ -30,22 +28,21 @@ public class ArmStayInPlace extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // m_arm.incrementPosition(m_speed.getAsDouble()*m_speedmodifier.getAsDouble()*.1);
-    
+
     m_arm.setArmPosition(m_position.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+
   }
 
   // Returns true when the command should end.

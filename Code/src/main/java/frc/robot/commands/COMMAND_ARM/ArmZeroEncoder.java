@@ -12,6 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmZeroEncoder extends InstantCommand {
   private ArmSubsystem m_arm;
+
   public ArmZeroEncoder(ArmSubsystem arm) {
     m_arm = arm;
     addRequirements(arm);

@@ -38,7 +38,7 @@ public class PigeonBalanceSmartPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //g8itm_timer.reset();
+    // g8itm_timer.reset();
     m_drive.setPositionLeftMotor(m_currentPosition += m_drive.pitchAdjust());
     m_drive.setPositionRightMotor(m_currentPosition += m_drive.pitchAdjust());
 

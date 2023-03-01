@@ -13,11 +13,10 @@ import frc.robot.subsystems.GripperSubsystem;
 public class OpenGripper extends InstantCommand {
   private GripperSubsystem m_gripperSubsystem;
 
-
   public OpenGripper(GripperSubsystem gripper) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gripper);
-  
+
     m_gripperSubsystem = gripper;
   }
 

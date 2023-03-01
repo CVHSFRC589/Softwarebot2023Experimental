@@ -31,11 +31,11 @@ public final class Constants {
 
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
 
-    public static final int kWristPort = 40;//40
+    public static final int kWristPort = 40;// 40
 
     public static final int kLeftMotorPort = 11;// 11
     public static final int kRightMotorPort = 12;// 12;
-    
+
     public static final int kLeftMotorPort2 = 13;// 11
     public static final int kRightMotorPort2 = 14;// 12;
     // Analog inputs
@@ -80,7 +80,7 @@ public final class Constants {
     public static final double WRIST_ENCODER_TO_DEG = 5.7;
     public static final int maxDriveAmps = 35;
     public static final int DRIVE_WHEEL_RADIUS = 3;
-    public static final double ARM_GEAR_RATIO = .01;//.01;
+    public static final double ARM_GEAR_RATIO = .01;// .01;
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
 
     public static final double DRIVE_WHEEL_CIRCUM = 2 * Math.PI * DRIVE_WHEEL_RADIUS;
@@ -123,7 +123,7 @@ public final class Constants {
     public static final int defaultSlot = 0;
     public static final int smartMotionSlot = 1;
     public static final int smartVelocitySlot = 2;
-    //SMART VELOCITY CONSTANTS
+    // SMART VELOCITY CONSTANTS
     public static final double kP = 0.0003;
     public static final double kI = 0;
     public static final double kD = 0;
@@ -136,7 +136,7 @@ public final class Constants {
     public static final double minVel = 0;
     public static final double maxAcc = 2000;
     public static final double allowedErr = 0.0056;
-    //SMART POSITION CONSTANTS
+    // SMART POSITION CONSTANTS
     public static final double kPSM = 0.0012;
     public static final double kDSM = 0;
     public static final double kISM = 0;

@@ -18,12 +18,12 @@ public class TurnDeg extends CommandBase {
    * Creates a new DriveDistance.
    *
    * @param inches The number of inches the robot will drive
-   * @param speed The speed at which the robot will drive
-   * @param drive The drive subsystem on which this command will run
+   * @param speed  The speed at which the robot will drive
+   * @param drive  The drive subsystem on which this command will run
    */
   public TurnDeg(double degrees, double speed, DriveSubsystem drive) {
     m_degrees = degrees;
-    m_speed = speed*-1;
+    m_speed = speed * -1;
     m_drive = drive;
     m_drive.resetEncoders();
     addRequirements(m_drive);
@@ -31,13 +31,13 @@ public class TurnDeg extends CommandBase {
 
   @Override
   public void initialize() {
-    m_drive.resetEncoders(); 
-    /*   
-    if (m_degrees<0){
-      m_speed = m_speed*-1;
-    }
-    */
-    //m_drive.arcadeDrive(0, m_speed);
+    m_drive.resetEncoders();
+    /*
+     * if (m_degrees<0){
+     * m_speed = m_speed*-1;
+     * }
+     */
+    // m_drive.arcadeDrive(0, m_speed);
   }
 
   @Override
@@ -54,6 +54,6 @@ public class TurnDeg extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return m_drive.getAbsAverageEncoderDistance() >= (PhysicalConstants.SOFIE_TURN_CIRCUM)*(m_degrees/360.0);
+    return m_drive.getAbsAverageEncoderDistance() >= (PhysicalConstants.SOFIE_TURN_CIRCUM) * (m_degrees / 360.0);
   }
 }

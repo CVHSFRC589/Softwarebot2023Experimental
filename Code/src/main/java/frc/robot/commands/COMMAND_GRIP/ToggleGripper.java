@@ -12,7 +12,7 @@ import frc.robot.subsystems.GripperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ToggleGripper extends InstantCommand {
   private GripperSubsystem m_grip;
-  
+
   public ToggleGripper(GripperSubsystem gripper) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gripper);
@@ -23,9 +23,7 @@ public class ToggleGripper extends InstantCommand {
   @Override
   public void initialize() {
     // if(m_arm.getEncoderDeg()>25){
-      m_grip.toggleGripperSolenoids();
-    
-    
-    
+    m_grip.toggleGripperSolenoids();
+
   }
 }

@@ -12,8 +12,9 @@ import frc.robot.subsystems.WristSubsystem;
 public class WristSetSpeed extends CommandBase {
   private WristSubsystem m_wrist;
   private DoubleSupplier m_speed;
+
   /** Creates a new WristSetSpeed. */
-  public WristSetSpeed(WristSubsystem wrist ,DoubleSupplier speed) {
+  public WristSetSpeed(WristSubsystem wrist, DoubleSupplier speed) {
     m_wrist = wrist;
     m_speed = speed;
     addRequirements(m_wrist);
@@ -23,7 +24,7 @@ public class WristSetSpeed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

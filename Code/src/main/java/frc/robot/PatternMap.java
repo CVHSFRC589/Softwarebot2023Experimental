@@ -70,18 +70,18 @@ public class PatternMap {
     }
 
     // public String getPattern(int i) {
-    //     return arrayPatterns.get(i);
+    // return arrayPatterns.get(i);
     // }
-    
+
     // public int getPatternsNum() {
-    //     return arrayPatterns.size();
+    // return arrayPatterns.size();
     // }
 
     // private void keysToString() {
-    //     // return (String[]) m_colorMap.keySet().toArray();
-    //     for(String key : m_colorMap.keySet()) {
-    //         arrayPatterns.add(key);
-    //     }
+    // // return (String[]) m_colorMap.keySet().toArray();
+    // for(String key : m_colorMap.keySet()) {
+    // arrayPatterns.add(key);
+    // }
     // }
 
     // m_pattern.setString(defaultColor);

@@ -8,13 +8,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -33,7 +30,6 @@ public class WristSubsystem extends SubsystemBase {
 
   /** Creates a new WristSubsystem. */
   public WristSubsystem() {
-    //
     // sets motor to motor id
     m_wrist = new WPI_TalonSRX(IDConstants.kWristPort);
 
@@ -41,17 +37,8 @@ public class WristSubsystem extends SubsystemBase {
 
     m_wrist.set(TalonSRXControlMode.Position, 0);
 
-    // m_wrist.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative);
     m_wrist.setNeutralMode(NeutralMode.Brake);
     m_talonConfig = new TalonSRXConfiguration();
-
-    // m_wrist.configPeakCurrentLimit(Constants.kPeakCurrentAmps,
-    // Constants.kTimeoutMs);
-    // m_wrist.configPeakCurrentDuration(Constants.kPeakTimeMs,
-    // Constants.kTimeoutMs);
-    // m_wrist.configContinuousCurrentLimit(Constants.kContinCurrentAmps,
-    // Constants.kTimeoutMs);
-    // m_wrist.enableCurrentLimit(_currentLimEn); // Honor initial setting
 
     /* setup a basic closed loop */
     m_wrist.setNeutralMode(NeutralMode.Brake); // Netural Mode override
@@ -64,6 +51,7 @@ public class WristSubsystem extends SubsystemBase {
      * Positive Sensor should match Motor Positive output (Green LED)
      */
     m_wrist.setSensorPhase(true);
+
     // m_wrist.configAllSettings();
 
     // /* Gains for Position Closed Loop servo */
@@ -91,10 +79,11 @@ public class WristSubsystem extends SubsystemBase {
     m_currentPosition += increment;
 
   }
-  
+
   // public void resetEncoders() {
-  //   m_wristEncoder.setQuadraturePosition(0, 0);
-  //   SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()", m_wristEncoder.getQuadraturePosition());
+  // m_wristEncoder.setQuadraturePosition(0, 0);
+  // SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()",
+  // m_wristEncoder.getQuadraturePosition());
 
   // }
 
@@ -106,17 +95,16 @@ public class WristSubsystem extends SubsystemBase {
   public void wristSetVelocity(DoubleSupplier joystick) {
 
     // if (getWristDeg() <= 120 && getWristDeg() >= 0) {
-      m_wrist.set(joystick.getAsDouble());
-
+    m_wrist.set(joystick.getAsDouble());
     // } else {
-      // m_wrist.set(0);
-    //}
+    // m_wrist.set(0);
+    // }
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Wrist m_wristEncoder.getPulseWidthPosition()", m_wristEncoder.getQuadraturePosition());
-    SmartDashboard.putNumber("Wrist Degrees????", getWristDeg());
+    SmartDashboard.putNumber("Wrist Encoder", m_wristEncoder.getQuadraturePosition());
+    SmartDashboard.putNumber("Wrist Degrees", getWristDeg());
     // This method will be called once per scheduler run
   }
 }

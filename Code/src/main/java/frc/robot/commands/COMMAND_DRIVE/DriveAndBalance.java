@@ -12,15 +12,14 @@ import frc.robot.subsystems.DriveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DriveAndBalance extends SequentialCommandGroup {
   /** Creates a new DriveAndBalance. */
-  
+
   public DriveAndBalance(DriveSubsystem drive, double distance) {
-    
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new DriveDistance(distance, .40 ,drive),
-    new PigeonBalanceSmartVelocity(drive),
-    new PIDLockInPlace(drive, 0)
-    );
+        new DriveDistance(distance, .40, drive),
+        new PigeonBalanceSmartVelocity(drive),
+        new PIDLockInPlace(drive, 0));
   }
 }

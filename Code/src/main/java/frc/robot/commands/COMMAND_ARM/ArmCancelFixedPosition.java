@@ -4,7 +4,6 @@
 
 package frc.robot.commands.COMMAND_ARM;
 
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
 

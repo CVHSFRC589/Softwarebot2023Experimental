@@ -4,13 +4,13 @@
 
 package frc.robot.commands.COMMAND_ARM;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmSetPosition extends CommandBase {
   private ArmSubsystem m_arm;
   private double m_position;
+
   /** Creates a new ArmSetPosition. */
   public ArmSetPosition(ArmSubsystem arm, double position) {
     m_position = position;
@@ -22,9 +22,10 @@ public class ArmSetPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //m_position = m_arm.clampValue(m_position);
+    // m_position = m_arm.clampValue(m_position);
     m_arm.setArmPosition(m_position);
   }
+
   @Override
   public boolean isFinished() {
     return !m_arm.isInFixedPositionMode();

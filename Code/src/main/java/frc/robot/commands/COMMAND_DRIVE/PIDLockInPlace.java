@@ -4,7 +4,6 @@
 
 package frc.robot.commands.COMMAND_DRIVE;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -12,23 +11,24 @@ public class PIDLockInPlace extends CommandBase {
   /** Creates a new PIDDrive. */
   private DriveSubsystem m_drive;
   private double m_distance;
+
   public PIDLockInPlace(DriveSubsystem drive, double distance) {
     m_drive = drive;
     m_distance = distance;
-    addRequirements(m_drive);    
+    addRequirements(m_drive);
   }
 
   // Call\ed when the command is initially scheduled.
   @Override
   public void initialize() {
     m_drive.setPIDMode();
-    m_drive.setSafetyPID(false); 
+    m_drive.setSafetyPID(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     m_drive.setPositionLeftMotor(m_distance);
     m_drive.setPositionRightMotor(m_distance);
   }

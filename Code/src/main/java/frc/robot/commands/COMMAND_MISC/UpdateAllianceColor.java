@@ -13,6 +13,7 @@ public class UpdateAllianceColor extends InstantCommand {
   private VisualFeedbackSubsystem m_vfs;
   private NetworkTable m_table;
   private NetworkTableEntry m_patternOver;
+
   /** Creates a new SetVisualFeedbackMode. */
   public UpdateAllianceColor(VisualFeedbackSubsystem vfs) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,7 +24,8 @@ public class UpdateAllianceColor extends InstantCommand {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
@@ -32,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_clampedPosition;
   private double m_currentPosition;
   private boolean m_fixedposition;
-  private DoubleSolenoid m_armPiston;
+  // private DoubleSolenoid m_armPiston;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -45,8 +44,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_clampedPosition = 0;
     m_motor.setInverted(true);
     m_motor.setIdleMode(IdleMode.kBrake);
-    m_armPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kPistonForward,
-        IDConstants.kPistonReverse);
+    // m_armPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kPistonForward,
+    //     IDConstants.kPistonReverse);
     m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
@@ -76,13 +75,12 @@ public class ArmSubsystem extends SubsystemBase {
     m_PIDController.setIZone(ArmPIDConstants.kIzSM, ArmPIDConstants.smartMotionSlot);
     m_PIDController.setFF(ArmPIDConstants.kFFSM, ArmPIDConstants.smartMotionSlot);
 
-
     m_upperlimitswitch.enableLimitSwitch(true);
     m_lowerlimitswitch.enableLimitSwitch(true);
 
   }
   // ==========================================SENSOR METHODS========================================== \\
-  
+
   public double getEncoderDeg() {
     return m_encoder.getPosition() * 360;
   }
@@ -119,41 +117,39 @@ public class ArmSubsystem extends SubsystemBase {
   // ================================================================================================== \\
 
   // ==========================================PISTON METHODS========================================== \\
-  
-  public void toggleGripperSolenoids() {
-    if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
-      openPiston();
-    else
-      closePiston();
-  }
 
-  public void openPiston() {
-    m_armPiston.set(DoubleSolenoid.Value.kReverse);
+  // public void togglePistonSolenoids() {
+  //   if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
+  //     openPiston();
+  //   else
+  //     closePiston();
+  // }
 
-  }
+  // public void openPiston() {
+  //   m_armPiston.set(DoubleSolenoid.Value.kReverse);
 
-  public void closePiston() {
-    m_armPiston.set(DoubleSolenoid.Value.kForward);
+  // }
 
-  }
+  // public void closePiston() {
+  //   m_armPiston.set(DoubleSolenoid.Value.kForward);
 
-  public DoubleSolenoid.Value getPistonValue() {
-    return m_armPiston.get();
-  }
+  // }
 
-  public boolean isPistonOpen() {
-    if (m_armPiston.get() == DoubleSolenoid.Value.kForward) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // public DoubleSolenoid.Value getPistonValue() {
+  //   return m_armPiston.get();
+  // }
+
+  // public boolean isPistonOpen() {
+  //   if (m_armPiston.get() == DoubleSolenoid.Value.kForward) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  //}
   // ================================================================================================== \\
 
-  
-  
-  // ==========================================ARM METHODS========================================== \\
-  
+  // ==========================================ARM METHODS============================================= \\
+
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
@@ -187,7 +183,6 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setVelocityArm(double velocity) {
-    // System.out.println(velocity);
     m_PIDController.setReference(velocity, ControlType.kVelocity, ArmPIDConstants.defaultSlot);
   }
 
@@ -202,7 +197,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   // ================================================================================================== \\
 
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
@@ -213,11 +207,11 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ARM AMP", m_motor.getOutputCurrent());
     SmartDashboard.putBoolean("Upper limit Switch", m_upperlimitswitch.isPressed());
     SmartDashboard.putBoolean("Lower limit Switch", m_lowerlimitswitch.isPressed());
-    //CHECK IF ARM IS ZEROED ---> SET ZERO
+    // CHECK IF ARM IS ZEROED ---> SET ZERO
     if (m_lowerlimitswitch.isPressed()) {
       m_encoder.setPosition(0);
     }
-    SmartDashboard.putData(m_armPiston);
+    // SmartDashboard.putData(m_armPiston);
     // This method will be called on ce per scheduler run
   }
 }

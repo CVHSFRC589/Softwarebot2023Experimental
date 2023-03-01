@@ -29,30 +29,28 @@ public class VisualFeedbackSubsystem extends SubsystemBase {
     m_patternOver = m_table.getEntry(LEDConstants.PATTERN_FINISHED_ENTRY_NAME);
     m_patternMap = new PatternMap();
   }
-  public void setAllianceColor(){
+
+  public void setAllianceColor() {
     m_alliance = DriverStation.getAlliance();
-    if(m_alliance.equals(DriverStation.Alliance.Red)){
+    if (m_alliance.equals(DriverStation.Alliance.Red)) {
       defaultColor = "red";
-    }
-    else if(m_alliance.equals(DriverStation.Alliance.Blue)){
+    } else if (m_alliance.equals(DriverStation.Alliance.Blue)) {
       defaultColor = "blue";
     }
   }
-  public void toggleOverride()
-  {
+
+  public void toggleOverride() {
     m_override = !m_override;
   }
-  private void giveVisualFeedback(String color){
+
+  private void giveVisualFeedback(String color) {
     m_visualFeedbackDevice.set(m_patternMap.getPattern(color));
   }
-  
-  private boolean allDone(){
-    if(m_patternOver.getString("").equals("done"))
-    {
+
+  private boolean allDone() {
+    if (m_patternOver.getString("").equals("done")) {
       return true;
-    }
-    else
-    {
+    } else {
       return false;
     }
   }
@@ -60,12 +58,11 @@ public class VisualFeedbackSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_override){
+    if (m_override) {
       m_pattern.setString("black");
-    }
-    else if(allDone()){
+    } else if (allDone()) {
       m_pattern.setString(defaultColor);
     }
     giveVisualFeedback(m_table.getEntry(LEDConstants.VISUAL_FEEDBACK_TABLE_ENTRY_NAME).getString(defaultColor));
-    }
+  }
 }

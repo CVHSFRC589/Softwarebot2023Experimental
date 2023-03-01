@@ -12,20 +12,18 @@ import frc.robot.subsystems.GripperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CloseGripper extends InstantCommand {
   private GripperSubsystem m_grip;
-  
+
   public CloseGripper(GripperSubsystem gripper) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gripper);
     m_grip = gripper;
-    
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_grip.close();
-    }
-    
-    
+    m_grip.close();
   }
 
+}

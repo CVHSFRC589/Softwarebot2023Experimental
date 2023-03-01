@@ -7,29 +7,20 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.ArmPhysicalConstants;
 import frc.robot.Constants.IDConstants;
 import frc.robot.Constants.OIConstants;
-// import frc.robot.commands.*;
 import frc.robot.commands.Auto_Pattern.*;
 import frc.robot.commands.COMMAND_ARM.*;
 import frc.robot.commands.COMMAND_DRIVE.*;
-import frc.robot.commands.COMMAND_GRIP.CloseGripper;
-import frc.robot.commands.COMMAND_GRIP.OpenGripper;
-import frc.robot.commands.COMMAND_GRIP.ToggleGripper;
-import frc.robot.commands.COMMAND_MISC.UpdateAllianceColor;
-import frc.robot.commands.COMMAND_WRIST.WristIncrementPosition;
-import frc.robot.commands.COMMAND_WRIST.WristSetSpeed;
-import frc.robot.commands.COMMAND_WRIST.WristStayInPlace;
+import frc.robot.commands.COMMAND_GRIP.*;
+import frc.robot.commands.COMMAND_MISC.*;
+import frc.robot.commands.COMMAND_WRIST.*;
 import frc.robot.subsystems.*;
 
 /**
@@ -43,15 +34,17 @@ import frc.robot.subsystems.*;
  * 
  */
 
-
- // ==========================================TODO LIST==========================================
-        /* add logic to arm clamps
-         * same logic to wrist and mindful of arm position(are there dangerous wrist positions???)
-         * 
-         * 
-         * 
-        */
-        // ====================================================================================
+// ==========================================TODO
+// LIST==========================================
+/*
+ * add logic to arm clamps
+ * same logic to wrist and mindful of arm position(are there dangerous wrist
+ * positions???)
+ * 
+ * 
+ * 
+ */
+// ====================================================================================
 
 public class RobotContainer {
         // camera
@@ -67,21 +60,16 @@ public class RobotContainer {
         SendableChooser<Command> m_chooser = new SendableChooser<>();
         SendableChooser<Command> m_driveChooser = new SendableChooser<>();
 
-        // The driver's controller
-        GenericHID m_driverJoyStick1 = new GenericHID(OIConstants.kDriverController1Port);
-        GenericHID m_driverJoyStick2 = new GenericHID(OIConstants.kDriverController2Port);
-        // GenericHID m_driverJoyStick = new GenericHID(1);
+        // The driver's joysticks
+        GenericHID m_driverJoyStickLeft = new GenericHID(OIConstants.kDriverController1Port);
+        GenericHID m_driverJoyStickRight = new GenericHID(OIConstants.kDriverController2Port);
+
         GenericHID m_operatorJoyStick = new GenericHID(OIConstants.kOperatorControllerPort);
 
-        // Joystick m_driverController = new Joystick(0);
-        // POVButton m_dpadup = new POVButton(m_driverJoyStick1, 0);
-        // POVButton m_dpaddown = new POVButton(m_driverJoyStick1, 180);
-
-       
         private final Command m_defaultAuto = new Obstacle(m_robotDrive);
 
-        private final Command m_setArcade = new SetDriveMode(m_robotDrive, true);
-        private final Command m_setTank = new SetDriveMode(m_robotDrive, false);
+        // private final Command m_setArcade = new SetDriveMode(m_robotDrive, true);
+        // private final Command m_setTank = new SetDriveMode(m_robotDrive, false);
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -91,31 +79,25 @@ public class RobotContainer {
                 configureButtonBindings();
 
                 // Configure default commands
-                // Set the default drive command to split-stick arcade drive
-
+                // // Set the default drive command to split-stick arcade drive
                 m_wrist.setDefaultCommand(new WristStayInPlace(m_wrist, () -> m_wrist.getWristDeg()));
 
                 m_robotDrive.setDefaultCommand(
                                 new DriveDefault(
                                                 m_robotDrive,
-                                                () -> -m_driverJoyStick1.getRawAxis(OIConstants.kYaxis),
-                                                () -> -m_driverJoyStick2.getRawAxis(OIConstants.kYaxis),
-                                                () -> -m_driverJoyStick1.getRawAxis(OIConstants.kXaxis)));
+                                                () -> -m_driverJoyStickLeft.getRawAxis(OIConstants.kYaxis),
+                                                () -> -m_driverJoyStickRight.getRawAxis(OIConstants.kYaxis),
+                                                () -> -m_driverJoyStickLeft.getRawAxis(OIConstants.kXaxis)));
 
-                // m_robotDrive.setDefaultCommand(
-                // new SmoothDrive(
-                // m_robotDrive,
-                // () -> -m_driverController.getLeftY(),
-                // () -> -m_driverController.getLeftX()));
-               
+
                 // LOCKS ARM IN PLACE
                 m_robotArm.setDefaultCommand(
-                                new ArmFollowJoy(m_robotArm, 
+                                new ArmFollowJoy(m_robotArm,
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
-                
-                m_driveChooser.setDefaultOption("Tank", m_setTank);
-                m_driveChooser.addOption("Arcade", m_setArcade);
+
+                // m_driveChooser.setDefaultOption("Tank", m_setTank);
+                // m_driveChooser.addOption("Arcade", m_setArcade);
 
                 SmartDashboard.putData(m_chooser);
                 SmartDashboard.putData(m_driveChooser);
@@ -136,50 +118,43 @@ public class RobotContainer {
          */
         private void configureButtonBindings() {
 
-                // ==========================================DRIVER CONTROLS==========================================
+                // ==========================================DRIVER CONTROLS========================================== \\
 
                 // DRIVE AND BALANCE
-                new JoystickButton(m_driverJoyStick1, 11)
+                new JoystickButton(m_driverJoyStickLeft, 11)
                                 .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
-                // LOCK 
-                new JoystickButton(m_driverJoyStick1, 10)
+                // LOCK
+                new JoystickButton(m_driverJoyStickLeft, 10)
                                 .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 0));
-                
+
                 // 75% SPEED
-                new JoystickButton(m_driverJoyStick1, 6)
+                new JoystickButton(m_driverJoyStickLeft, 6)
                                 .toggleOnTrue(new DriveSelectSpeed(m_robotDrive, .75));
                 // 50% SPEED
-                new JoystickButton(m_driverJoyStick1, 7)
+                new JoystickButton(m_driverJoyStickLeft, 7)
                                 .toggleOnTrue(new DriveSelectSpeed(m_robotDrive, .50));
 
-                //TOGGLE GRIPPER
-                new JoystickButton(m_driverJoyStick2, 1)//Make seperate area for joystick 2
+                // TOGGLE GRIPPER
+                new JoystickButton(m_driverJoyStickRight, 1)
                                 .onTrue(new ToggleGripper(m_robotGripper));
 
-                // new JoystickButton(m_driverJoyStick1, 4)
-                //                 .onTrue(new CloseGripper(m_robotGripper, m_robotArm));
+                // ===================================================================================================== \\
 
-
-                // =====================================================================================================
-
-                // ==========================================OPERATOR CONTROLS==========================================
-                
-                // new POVButton(m_operatorJoyStick, 0)
-                // .whileTrue(new ChangeArmPos(.5, m_robotArm));
+                // ==========================================OPERATOR CONTROLS========================================== \\
 
                 // ZERO ARM ENCODER
                 new JoystickButton(m_operatorJoyStick, 12)
                                 .toggleOnTrue(new ArmZeroEncoder(m_robotArm));
-                //LOCK ARM IN PLACE
+                // LOCK ARM IN PLACE
                 new JoystickButton(m_operatorJoyStick, 2)
                                 .toggleOnTrue(new ArmPIDLock(m_robotArm));
-                //LEVEL MIN
+                // LEVEL MIN
                 new JoystickButton(m_operatorJoyStick, 1)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
-                //LEVEL MAX
+                // LEVEL MAX
                 new JoystickButton(m_operatorJoyStick, 3)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 105));
-                //LEVEL FLOOR 
+                // LEVEL FLOOR
                 new JoystickButton(m_operatorJoyStick, 4)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelfloor));
                 // LEVEL 2 CUBE
@@ -188,46 +163,20 @@ public class RobotContainer {
                 // LEVEL 2 CONE
                 new JoystickButton(m_operatorJoyStick, 6)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cone));
-                //LEVEL LOAD
+                // LEVEL LOAD
                 new JoystickButton(m_operatorJoyStick, 7)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelportal));
-                
-                //WRIST UP
+
+                // TOGGLE PISTON
+                // new JoystickButton(m_operatorJoyStick, 8)
+                //                 .toggleOnTrue(new ArmTogglePiston(m_robotArm));
+                // WRIST UP
                 new JoystickButton(m_operatorJoyStick, 9)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
-                //WRIST DOWN
+                // WRIST DOWN
                 new JoystickButton(m_operatorJoyStick, 10)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> 0.5));
-                // =======================================================================================================
-
-                // ==========================================DEBUGING CONTROLS==========================================
-                // While holding the shoulder button, drive at half speed
-                // kX = button b
-                // kA = button x
-                // kB = button a
-                // kY = button y
-                // new JoystickButton(m_driverController, OIConstants.buttonY.value)
-                // .onTrue(new TurnDegGyro(90, .25, m_robotDrive));
-                // new JoystickButton(m_driverController, OIConstants.buttonB.value)
-                // .onTrue(new DriveWithinDistance(40, .35, m_robotDrive));
-                // new JoystickButton(m_driverController, OIConstants.buttonB.value)
-                // .onTrue(new DriveVoltage(SmartDashboard.getNumber("Motor voltage",0),
-                // m_robotDrive));
-
-                // new JoystickButton(m_driverController, OIConstants.buttonA.value)
-                // .onTrue(new TurnDeg(90, .5, m_robotDrive));
-
-                // new JoystickButton(m_driverController, Button.kRightBumper.value)
-                // .toggleOnTrue(new HalveDriveSpeed(m_robotDrive));
-
-                // new JoystickButton(m_driverJoyStick1, 11)
-                // .toggleOnTrue(new DriveAndBalance(m_robotDrive));
-
-                // new JoystickButton(m_driverController, OIConstants.kButtonY)
-                // .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 36));
-
-                // new JoystickButton(m_driverController, OIConstants.buttonX.value)
-                // .onTrue(new DriveDistance(60, 0.25, m_robotDrive));
+                // ======================================================================================================= \\
 
         }
 
