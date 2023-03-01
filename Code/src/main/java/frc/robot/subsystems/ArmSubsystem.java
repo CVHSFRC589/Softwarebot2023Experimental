@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -15,13 +14,13 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmPIDConstants;
 import frc.robot.Constants.ArmPhysicalConstants;
 import frc.robot.Constants.IDConstants;
-import frc.robot.Constants.DrivePIDConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhysicalConstants;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -33,6 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_clampedPosition;
   private double m_currentPosition;
   private boolean m_fixedposition;
+  private DoubleSolenoid m_armPiston;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -45,7 +45,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_clampedPosition = 0;
     m_motor.setInverted(true);
     m_motor.setIdleMode(IdleMode.kBrake);
-
+    m_armPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kPistonForward,
+        IDConstants.kPistonReverse);
     m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
@@ -63,35 +64,25 @@ public class ArmSubsystem extends SubsystemBase {
     m_PIDController.setIZone(ArmPIDConstants.kIz, 0);
     m_PIDController.setFF(ArmPIDConstants.kFF, 0);
 
-
-
     m_PIDController.setSmartMotionMaxVelocity(ArmPIDConstants.maxVelSM, ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setSmartMotionMinOutputVelocity(ArmPIDConstants.minVelSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setSmartMotionMaxAccel(ArmPIDConstants.maxAccSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setSmartMotionAllowedClosedLoopError(ArmPIDConstants.allowedErrSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionMinOutputVelocity(ArmPIDConstants.minVelSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionMaxAccel(ArmPIDConstants.maxAccSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionAllowedClosedLoopError(ArmPIDConstants.allowedErrSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, ArmPIDConstants.smartMotionSlot);
 
-    m_PIDController.setP(ArmPIDConstants.kPSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setI(ArmPIDConstants.kISM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setD(ArmPIDConstants.kDSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setIZone(ArmPIDConstants.kIzSM,  ArmPIDConstants.smartMotionSlot);
-    m_PIDController.setFF(ArmPIDConstants.kFFSM,  ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setP(ArmPIDConstants.kPSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setI(ArmPIDConstants.kISM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setD(ArmPIDConstants.kDSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setIZone(ArmPIDConstants.kIzSM, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setFF(ArmPIDConstants.kFFSM, ArmPIDConstants.smartMotionSlot);
 
-    
 
-    // max and min values??
-
-    // THESE do NOT change anything....
-    // m_PIDController.setPositionPIDWrappingEnabled(true);
-    // m_PIDController.setPositionPIDWrappingMaxInput(ArmPIDConstants.PIDWrappingMaxInput);
-    // m_PIDController.setPositionPIDWrappingMinInput(ArmPIDConstants.PIDWrappingMinInput);
     m_upperlimitswitch.enableLimitSwitch(true);
     m_lowerlimitswitch.enableLimitSwitch(true);
 
   }
-  // ==========================================SENSOR
-  // METHODS========================================== \\
-
+  // ==========================================SENSOR METHODS========================================== \\
+  
   public double getEncoderDeg() {
     return m_encoder.getPosition() * 360;
   }
@@ -112,6 +103,57 @@ public class ArmSubsystem extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
+  public boolean isInPosition(double position) {
+
+    position = clampValue(position);
+    if (getEncoderInches() >= position) {
+
+      // m_fixedposition = false;
+
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+  // ================================================================================================== \\
+
+  // ==========================================PISTON METHODS========================================== \\
+  
+  public void toggleGripperSolenoids() {
+    if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
+      openPiston();
+    else
+      closePiston();
+  }
+
+  public void openPiston() {
+    m_armPiston.set(DoubleSolenoid.Value.kReverse);
+
+  }
+
+  public void closePiston() {
+    m_armPiston.set(DoubleSolenoid.Value.kForward);
+
+  }
+
+  public DoubleSolenoid.Value getPistonValue() {
+    return m_armPiston.get();
+  }
+
+  public boolean isPistonOpen() {
+    if (m_armPiston.get() == DoubleSolenoid.Value.kForward) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  // ================================================================================================== \\
+
+  
+  
+  // ==========================================ARM METHODS========================================== \\
+  
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
       return ArmPhysicalConstants.maxArmValue;
@@ -140,7 +182,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_fixedposition = true;
     // limit position to safe values
     // m_clampedPosition = clampValue(position);SM
-    m_PIDController.setReference(position/360, ControlType.kSmartMotion, ArmPIDConstants.smartMotionSlot);
+    m_PIDController.setReference(position / 360, ControlType.kSmartMotion, ArmPIDConstants.smartMotionSlot);
 
   }
 
@@ -155,24 +197,11 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void canceledFixedPositionMode() {
-    // System.out.println("-----------------CANCLED FIXED
-    // POS-----------------------");
     m_fixedposition = false;
   }
 
-  public boolean isInPosition(double position) {
+  // ================================================================================================== \\
 
-    position = clampValue(position);
-    if (getEncoderInches() >= position) {
-
-      // m_fixedposition = false;
-
-      return true;
-    } else {
-      return false;
-    }
-
-  }
 
   @Override
   public void periodic() {
@@ -182,14 +211,13 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Fixed pos?", m_fixedposition);
     SmartDashboard.putNumber("ARM DEG", getEncoderDeg());
     SmartDashboard.putNumber("ARM AMP", m_motor.getOutputCurrent());
-    SmartDashboard.putBoolean("Upper limit Switch",
-        m_upperlimitswitch.isPressed());
-    SmartDashboard.putBoolean("Lower limit Switch",
-        m_lowerlimitswitch.isPressed());
+    SmartDashboard.putBoolean("Upper limit Switch", m_upperlimitswitch.isPressed());
+    SmartDashboard.putBoolean("Lower limit Switch", m_lowerlimitswitch.isPressed());
+    //CHECK IF ARM IS ZEROED ---> SET ZERO
     if (m_lowerlimitswitch.isPressed()) {
       m_encoder.setPosition(0);
     }
-    
+    SmartDashboard.putData(m_armPiston);
     // This method will be called on ce per scheduler run
   }
 }

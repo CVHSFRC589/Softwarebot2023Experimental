@@ -8,8 +8,6 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ArmPIDConstants;
-import frc.robot.Constants.ArmPhysicalConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmFollowJoy extends CommandBase {

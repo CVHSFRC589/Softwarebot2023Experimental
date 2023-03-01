@@ -23,8 +23,14 @@ public final class Constants {
     public static final double kStatic = 0.16935;// min amount of voltage???
     public static final int kGripperForward = 0;
     public static final int kGripperReverse = 1;
+
+    public static final int kPistonForward = 2;
+    public static final int kPistonReverse = 3;
+
     public static final int kArmMotorPort = 50;// 12;//50
+
     public static final int VISUAL_FEEDBACK_MOTOR_PORT = 0;
+
     public static final int kWristPort = 40;//40
 
     public static final int kLeftMotorPort = 11;// 11
@@ -117,7 +123,7 @@ public final class Constants {
     public static final int defaultSlot = 0;
     public static final int smartMotionSlot = 1;
     public static final int smartVelocitySlot = 2;
-
+    //SMART VELOCITY CONSTANTS
     public static final double kP = 0.0003;
     public static final double kI = 0;
     public static final double kD = 0;
@@ -130,7 +136,7 @@ public final class Constants {
     public static final double minVel = 0;
     public static final double maxAcc = 2000;
     public static final double allowedErr = 0.0056;
-
+    //SMART POSITION CONSTANTS
     public static final double kPSM = 0.0012;
     public static final double kDSM = 0;
     public static final double kISM = 0;

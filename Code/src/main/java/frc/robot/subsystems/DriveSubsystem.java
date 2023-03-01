@@ -27,7 +27,7 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 public class DriveSubsystem extends SubsystemBase {
- // private AHRS navx;
+
   CANSparkMax m_leftMotor;
   CANSparkMax m_rightMotor;
   CANSparkMax m_leftMotor2;

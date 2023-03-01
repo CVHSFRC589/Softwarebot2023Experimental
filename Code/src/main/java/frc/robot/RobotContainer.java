@@ -22,15 +22,9 @@ import frc.robot.Constants.OIConstants;
 // import frc.robot.commands.*;
 import frc.robot.commands.Auto_Pattern.*;
 import frc.robot.commands.COMMAND_ARM.*;
-// import frc.robot.commands.COMMAND_ARM.ArmFollowJoy;
-// import frc.robot.commands.COMMAND_ARM.ArmSetPosition;
 import frc.robot.commands.COMMAND_DRIVE.*;
 import frc.robot.commands.COMMAND_GRIP.CloseGripper;
 import frc.robot.commands.COMMAND_GRIP.OpenGripper;
-// import frc.robot.commands.COMMAND_DRIVE.DriveDefault;
-// import frc.robot.commands.COMMAND_DRIVE.DriveAndBalance;
-// import frc.robot.commands.COMMAND_DRIVE.DriveSelectSpeed;
-// import frc.robot.commands.COMMAND_DRIVE.SetDriveMode;
 import frc.robot.commands.COMMAND_GRIP.ToggleGripper;
 import frc.robot.commands.COMMAND_MISC.UpdateAllianceColor;
 import frc.robot.commands.COMMAND_WRIST.WristIncrementPosition;
@@ -83,10 +77,8 @@ public class RobotContainer {
         // POVButton m_dpadup = new POVButton(m_driverJoyStick1, 0);
         // POVButton m_dpaddown = new POVButton(m_driverJoyStick1, 180);
 
-        private final Command m_complexAuto = new ComplexAuto(m_robotDrive);
-        private final Command m_realcomplexAuto = new RealComplexAuto(m_robotDrive);
-
-        private final Command m_Obstacle = new Obstacle(m_robotDrive);
+       
+        private final Command m_defaultAuto = new Obstacle(m_robotDrive);
 
         private final Command m_setArcade = new SetDriveMode(m_robotDrive, true);
         private final Command m_setTank = new SetDriveMode(m_robotDrive, false);
@@ -113,7 +105,7 @@ public class RobotContainer {
                 // m_robotDrive.setDefaultCommand(
                 // new SmoothDrive(
                 // m_robotDrive,
-                // () -> -m_driverController.getLeftY(), //this changing doubles to supplier!
+                // () -> -m_driverController.getLeftY(),
                 // () -> -m_driverController.getLeftX()));
                
                 // LOCKS ARM IN PLACE
@@ -122,19 +114,6 @@ public class RobotContainer {
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
                                                 () -> -m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)));
                 
-                // m_robotArm.setDefaultCommand(
-                //                 new ArmMoveAndLock(m_robotArm,m_operatorJoyStick
-                //                                 // () -> -m_operatorJoyStick.getRawAxis(OIConstants.kYaxis),
-                //                                 // () -> m_operatorJoyStick.getRawAxis(OIConstants.kSlideraxis)
-                //                                 ));
-
-                // m_robotGripper.setDefaultCommand(
-                //                 new AutoGrip(m_robotGripper, m_robotArm));
-
-                m_chooser.setDefaultOption("Complex Auto", m_complexAuto);
-                m_chooser.addOption("Real Complex Auto", m_realcomplexAuto);
-                m_chooser.addOption("Obstacle", m_Obstacle);
-
                 m_driveChooser.setDefaultOption("Tank", m_setTank);
                 m_driveChooser.addOption("Arcade", m_setArcade);
 
@@ -175,7 +154,7 @@ public class RobotContainer {
 
                 //TOGGLE GRIPPER
                 new JoystickButton(m_driverJoyStick2, 1)//Make seperate area for joystick 2
-                                .onTrue(new ToggleGripper(m_robotGripper, m_robotArm));
+                                .onTrue(new ToggleGripper(m_robotGripper));
 
                 // new JoystickButton(m_driverJoyStick1, 4)
                 //                 .onTrue(new CloseGripper(m_robotGripper, m_robotArm));
@@ -194,7 +173,6 @@ public class RobotContainer {
                 //LOCK ARM IN PLACE
                 new JoystickButton(m_operatorJoyStick, 2)
                                 .toggleOnTrue(new ArmPIDLock(m_robotArm));
-hio easan
                 //LEVEL MIN
                 new JoystickButton(m_operatorJoyStick, 1)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));

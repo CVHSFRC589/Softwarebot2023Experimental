@@ -6,17 +6,14 @@ package frc.robot.commands.COMMAND_GRIP;
 
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ArmPhysicalConstants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 
 public class AutoGrip extends CommandBase {
   /** Creates a new AutoGrip. */
-  private ArmSubsystem m_arm;
+  
   private GripperSubsystem m_grip;
-  public AutoGrip(GripperSubsystem grip, ArmSubsystem arm) {
+  public AutoGrip(GripperSubsystem grip) {
     m_grip = grip;
-    m_arm = arm;
     addRequirements(grip);
     
   }
@@ -30,9 +27,9 @@ public class AutoGrip extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //if(m_arm.getEncoderDeg()>30){
+    
       m_grip.close();
-    //}
+  
   }
 
   // Called once the command ends or is interrupted.

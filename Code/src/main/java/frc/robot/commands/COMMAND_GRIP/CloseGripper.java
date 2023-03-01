@@ -5,9 +5,6 @@
 package frc.robot.commands.COMMAND_GRIP;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants.ArmPhysicalConstants;
-import frc.robot.Constants.PhysicalConstants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -16,7 +13,7 @@ import frc.robot.subsystems.GripperSubsystem;
 public class CloseGripper extends InstantCommand {
   private GripperSubsystem m_grip;
   
-  public CloseGripper(GripperSubsystem gripper, ArmSubsystem arm) {
+  public CloseGripper(GripperSubsystem gripper) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(gripper);
     m_grip = gripper;
