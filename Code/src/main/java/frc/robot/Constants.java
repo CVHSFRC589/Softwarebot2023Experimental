@@ -152,11 +152,9 @@ public final class Constants {
   }
 
   public static final class ArmPhysicalConstants {
-    public static final double level2cone = 80;
-    public static final double level2cube = 80;
+    public static final double level2 = 100;
     public static final double levelportal = 15;
-    public static final double level1conecube = 30;
-    public static final double levelfloor = 30;
+    public static final double level1 = 27.5;
 
     public static final int maxArmAmp = 35;
     public static final double maxArmValue = 31;

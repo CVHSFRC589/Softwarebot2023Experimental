@@ -153,18 +153,12 @@ public class RobotContainer {
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
                 // LEVEL MAX
                 new JoystickButton(m_operatorJoyStick, 3)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 105));
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2));
                 // LEVEL FLOOR
                 new JoystickButton(m_operatorJoyStick, 4)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelfloor));
-                // LEVEL 2 CUBE
-                new JoystickButton(m_operatorJoyStick, 5)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cube));
-                // LEVEL 2 CONE
-                new JoystickButton(m_operatorJoyStick, 6)
-                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level2cone));
+                                .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.level1));
                 // LEVEL LOAD
-                new JoystickButton(m_operatorJoyStick, 7)
+                new JoystickButton(m_operatorJoyStick, 5)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelportal));
 
                 // TOGGLE PISTON
