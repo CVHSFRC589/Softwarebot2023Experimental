@@ -57,8 +57,9 @@ public class RobotContainer {
         private VisualFeedbackSubsystem m_led = new VisualFeedbackSubsystem();
 
         // A chooser for autonomous commands
-        SendableChooser<Command> m_chooser = new SendableChooser<>();
         SendableChooser<Command> m_driveChooser = new SendableChooser<>();
+        SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
 
         // The driver's joysticks
         GenericHID m_driverJoyStickLeft = new GenericHID(OIConstants.kDriverController1Port);
@@ -66,7 +67,7 @@ public class RobotContainer {
 
         GenericHID m_operatorJoyStick = new GenericHID(OIConstants.kOperatorControllerPort);
 
-        private final Command m_defaultAuto = new Obstacle(m_robotDrive);
+        private final Command m_defaultAuto = new AutoBalance(m_robotDrive);
 
         // private final Command m_setArcade = new SetDriveMode(m_robotDrive, true);
         // private final Command m_setTank = new SetDriveMode(m_robotDrive, false);
@@ -98,8 +99,11 @@ public class RobotContainer {
 
                 // m_driveChooser.setDefaultOption("Tank", m_setTank);
                 // m_driveChooser.addOption("Arcade", m_setArcade);
+                m_autoChooser.setDefaultOption("Drive out and Balance", m_defaultAuto);
+                m_autoChooser.addOption("Leave Community", new LeaveCommunity(m_robotDrive));
+                m_autoChooser.addOption("Score level 3 Cube", new Score3Cube(m_robotArm, m_robotDrive, m_robotGripper));
 
-                SmartDashboard.putData(m_chooser);
+                SmartDashboard.putData(m_autoChooser);
                 SmartDashboard.putData(m_driveChooser);
                 SmartDashboard.putData(m_robotDrive);
                 SmartDashboard.putNumber("Motor voltage", IDConstants.kStatic);
@@ -180,6 +184,6 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                return m_chooser.getSelected();
+                return m_autoChooser.getSelected();
         }
 }

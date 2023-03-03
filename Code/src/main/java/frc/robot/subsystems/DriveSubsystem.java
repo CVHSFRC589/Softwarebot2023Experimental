@@ -253,9 +253,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double pitchAdjustVelocity() {
     if (m_pigeon2.getPitch() > 3) {
-      return m_pigeon2.getPitch() * -60;
+      return m_pigeon2.getPitch() * -40;
     } else if (m_pigeon2.getPitch() < -3) {
-      return m_pigeon2.getPitch() * -60;
+      return m_pigeon2.getPitch() * -40;
     } else {
       return 0;
     }
