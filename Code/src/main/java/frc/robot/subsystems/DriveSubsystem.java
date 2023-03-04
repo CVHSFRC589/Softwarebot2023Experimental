@@ -83,8 +83,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setIdleMode(IdleMode.kBrake);
     m_leftMotor.setInverted(false);
     m_rightMotor.setInverted(true);
-    m_leftEncoder.setPositionConversionFactor(1.76);
-    m_rightEncoder.setPositionConversionFactor(1.76);
+    m_leftEncoder.setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
+    m_rightEncoder.setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
 
     m_driveType = () -> false;
     // m_leftMotor.setOpenLoopRampRate(.35);
@@ -402,6 +402,6 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Right PID Value", processVariableRight);
     SmartDashboard.putNumber("LMotor Percentage", percentLMotor);
     SmartDashboard.putNumber("RMotor Percentage", percentRMotor);
-
+    SmartDashboard.putBoolean("LOCKED?", m_PIDmode);
   }
 }

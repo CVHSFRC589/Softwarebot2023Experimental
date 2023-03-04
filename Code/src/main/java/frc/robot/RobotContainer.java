@@ -101,7 +101,13 @@ public class RobotContainer {
                 // m_driveChooser.addOption("Arcade", m_setArcade);
                 m_autoChooser.setDefaultOption("Drive out and Balance", m_defaultAuto);
                 m_autoChooser.addOption("Leave Community", new LeaveCommunity(m_robotDrive));
-                m_autoChooser.addOption("Score level 3 Cube", new Score3Cube(m_robotArm, m_robotDrive, m_robotGripper));
+                m_autoChooser.addOption("Score level 3 Cube", new Score3Cube(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.addOption("Outside Leave Community and balance", new LeaveCommunityAndBalance(m_robotDrive));
+                m_autoChooser.addOption("Auto Balance", new AutoBalance(m_robotDrive));
+                m_autoChooser.addOption("NOTHING", new NOTHING());
+
+
+
 
                 SmartDashboard.putData(m_autoChooser);
                 SmartDashboard.putData(m_driveChooser);
@@ -127,8 +133,11 @@ public class RobotContainer {
                 // DRIVE AND BALANCE
                 new JoystickButton(m_driverJoyStickLeft, 11)
                                 .toggleOnTrue(new DriveAndBalance(m_robotDrive, 36));
+                // DRIVE AND BALANCE
+                new JoystickButton(m_driverJoyStickLeft, 9)
+                                .toggleOnTrue(new BalanceAndLock(m_robotDrive));
                 // LOCK
-                new JoystickButton(m_driverJoyStickLeft, 10)
+                new JoystickButton(m_driverJoyStickLeft, 3)
                                 .toggleOnTrue(new PIDLockInPlace(m_robotDrive, 0));
 
                 // 75% SPEED

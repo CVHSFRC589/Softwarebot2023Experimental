@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 public final class Constants {
   public static final class IDConstants {
     public static final double kStatic = 0.16935;// min amount of voltage???
-    public static final int kGripperForward = 0;
-    public static final int kGripperReverse = 1;
+    public static final int kGripperForward = 1;//1
+    public static final int kGripperReverse = 0;//0
 
     public static final int kPistonForward = 2;
     public static final int kPistonReverse = 3;
@@ -84,7 +84,7 @@ public final class Constants {
     public static final double SOFIE_TURN_CIRCUM = Math.PI * 2 * 9.875;
 
     public static final double DRIVE_WHEEL_CIRCUM = 2 * Math.PI * DRIVE_WHEEL_RADIUS;
-    public static final double DRIVE_GEAR_RATIO = 10.71;
+    public static final double DRIVE_GEAR_RATIO = 8.45;
   }
 
   public static final class DrivePIDConstants {
