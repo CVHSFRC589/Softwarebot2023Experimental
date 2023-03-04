@@ -12,11 +12,15 @@ import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IDConstants;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivePIDConstants;
 import frc.robot.Constants.PhysicalConstants;
@@ -48,6 +52,10 @@ public class DriveSubsystem extends SubsystemBase {
   private double percentRMotor;
   private boolean m_PIDmode;
   private double m_maxoutput;
+
+  private NetworkTable m_table;
+  private NetworkTableEntry m_pattern;
+  private NetworkTableEntry m_patternOver;
 
   private DifferentialDrive m_drive;
   private BooleanSupplier m_driveType;// true is arcade false is tank drive
@@ -95,6 +103,10 @@ public class DriveSubsystem extends SubsystemBase {
     // smart motion
 
     setPIDConstants();
+    m_table = NetworkTableInstance.getDefault().getTable(LEDConstants.NETWORK_TABLE_NAME);
+    m_patternOver = m_table.getEntry(LEDConstants.PATTERN_FINISHED_ENTRY_NAME);
+    m_pattern = m_table.getEntry(LEDConstants.VISUAL_FEEDBACK_TABLE_ENTRY_NAME);
+  
   }
 
   /**
@@ -181,12 +193,15 @@ public class DriveSubsystem extends SubsystemBase {
     resetMotors();
     // true means it is in pid mode, false is in normal drive
     m_PIDmode = true;
+    m_pattern.setString("violet");
+    m_patternOver.setString("not over");
 
   }
 
   public void cancelPIDMode() {
     m_PIDmode = false;
     resetMotors();
+    m_patternOver.setString("over");
   }
 
   public void setVoltage(double voltage) {

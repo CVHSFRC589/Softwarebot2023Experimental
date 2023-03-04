@@ -9,6 +9,7 @@ import frc.robot.commands.COMMAND_DRIVE.DriveAndBalance;
 import frc.robot.commands.COMMAND_DRIVE.DriveDistance;
 import frc.robot.commands.COMMAND_DRIVE.PIDLockInPlace;
 import frc.robot.commands.COMMAND_DRIVE.PigeonBalanceSmartVelocity;
+import frc.robot.commands.COMMAND_MISC.Pause;
 import frc.robot.subsystems.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,8 +22,8 @@ public class AutoBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveDistance(40, 0.4, drive),
+      new Pause(1),
       new DriveDistance(40, 0.5, drive),
-      // new DriveD
       new PigeonBalanceSmartVelocity(drive),
       new PIDLockInPlace(drive, 0)
       );
