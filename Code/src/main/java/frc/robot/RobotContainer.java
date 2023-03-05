@@ -104,6 +104,8 @@ public class RobotContainer {
                 m_autoChooser.addOption("Score level 3 Cube", new Score3Cube(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.addOption("Outside Leave Community and balance", new LeaveCommunityAndBalance(m_robotDrive));
                 m_autoChooser.addOption("Auto Balance", new AutoBalance(m_robotDrive));
+                m_autoChooser.addOption("Score Level 2 + Balance Backwards", new ScoreLevel2AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+
                 m_autoChooser.addOption("NOTHING", new NOTHING());
 
 

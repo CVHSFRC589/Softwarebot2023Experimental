@@ -22,8 +22,9 @@ public class AutoBalance extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveDistance(40, 0.4, drive),
-      new Pause(1),
+      
       new DriveDistance(40, 0.5, drive),
+      new Pause(1),
       new PigeonBalanceSmartVelocity(drive),
       new PIDLockInPlace(drive, 0)
       );
