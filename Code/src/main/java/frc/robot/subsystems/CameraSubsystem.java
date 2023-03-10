@@ -11,6 +11,7 @@ import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSink.Kind;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CameraSubsystem extends SubsystemBase {
@@ -24,8 +25,15 @@ public class CameraSubsystem extends SubsystemBase {
   public CameraSubsystem() {
     m_driverCamera = new UsbCamera("Driver", 0);
     m_floorCamera = new UsbCamera("Floor", 1);
+
+    // m_driverCamera.setResolution(640, 480);
+    // m_floorCamera.setResolution(640, 480);
+    // m_driverCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // m_floorCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);    
+
     m_bsource = true;
     m_mjpegServer = new MjpegServer("Camera Server", 1181);
+
     CameraServer.startAutomaticCapture();
   }
 
