@@ -36,7 +36,7 @@ public class ArmFollowJoy extends CommandBase {
     SmartDashboard.putNumber("Joystick Y velocity", m_velocity.getAsDouble());
     SmartDashboard.putNumber("Joystick slider velocity modifier", m_velocitymodifier.getAsDouble());
 
-    double velocity = m_velocity.getAsDouble() * ((m_velocitymodifier.getAsDouble() + 1) / 2) * 750;
+    double velocity = m_velocity.getAsDouble() * ((m_velocitymodifier.getAsDouble() + 1) ) * 750;
 
     m_arm.setVelocityArm(velocity);
   }

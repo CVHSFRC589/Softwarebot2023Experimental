@@ -34,8 +34,7 @@ import frc.robot.subsystems.*;
  * 
  */
 
-// ==========================================TODO
-// LIST==========================================
+// ==========================================TODO LIST==========================================
 /*
  * add logic to arm clamps
  * same logic to wrist and mindful of arm position(are there dangerous wrist
@@ -48,13 +47,13 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
         // camera
-        UsbCamera camera = CameraServer.startAutomaticCapture();
         // The robot's subsystems
         private DriveSubsystem m_robotDrive = new DriveSubsystem();
         private ArmSubsystem m_robotArm = new ArmSubsystem();
         private GripperSubsystem m_robotGripper = new GripperSubsystem();
         private WristSubsystem m_wrist = new WristSubsystem();
         private VisualFeedbackSubsystem m_led = new VisualFeedbackSubsystem();
+        private CameraSubsystem m_robotcams =  new CameraSubsystem();
 
         // A chooser for autonomous commands
         SendableChooser<Command> m_driveChooser = new SendableChooser<>();
@@ -152,6 +151,9 @@ public class RobotContainer {
                 // TOGGLE GRIPPER
                 new JoystickButton(m_driverJoyStickRight, 1)
                                 .onTrue(new ToggleGripper(m_robotGripper));
+                // TOGGLE CAMERA
+                new JoystickButton(m_driverJoyStickLeft, 1)
+                                .onTrue(new ToggleCams(m_robotcams));
 
                 // ===================================================================================================== \\
 

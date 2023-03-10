@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_clampedPosition;
   private double m_currentPosition;
   private boolean m_fixedposition;
-  // private DoubleSolenoid m_armPiston;
+  private DoubleSolenoid m_armPiston;
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -44,8 +44,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_clampedPosition = 0;
     m_motor.setInverted(true);
     m_motor.setIdleMode(IdleMode.kBrake);
-    // m_armPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kPistonForward,
-    //     IDConstants.kPistonReverse);
+    m_armPiston = new DoubleSolenoid(PneumaticsModuleType.REVPH, IDConstants.kPistonForward,
+        IDConstants.kPistonReverse);
     m_lowerlimitswitch = m_motor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_upperlimitswitch = m_motor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_encoder.setPositionConversionFactor(PhysicalConstants.ARM_GEAR_RATIO);
@@ -118,34 +118,34 @@ public class ArmSubsystem extends SubsystemBase {
 
   // ==========================================PISTON METHODS========================================== \\
 
-  // public void togglePistonSolenoids() {
-  //   if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
-  //     openPiston();
-  //   else
-  //     closePiston();
-  // }
+  public void togglePistonSolenoids() {
+    if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
+      openPiston();
+    else
+      closePiston();
+  }
 
-  // public void openPiston() {
-  //   m_armPiston.set(DoubleSolenoid.Value.kReverse);
+  public void openPiston() {
+    m_armPiston.set(DoubleSolenoid.Value.kReverse);
 
-  // }
+  }
 
-  // public void closePiston() {
-  //   m_armPiston.set(DoubleSolenoid.Value.kForward);
+  public void closePiston() {
+    m_armPiston.set(DoubleSolenoid.Value.kForward);
 
-  // }
+  }
 
-  // public DoubleSolenoid.Value getPistonValue() {
-  //   return m_armPiston.get();
-  // }
+  public DoubleSolenoid.Value getPistonValue() {
+    return m_armPiston.get();
+  }
 
-  // public boolean isPistonOpen() {
-  //   if (m_armPiston.get() == DoubleSolenoid.Value.kForward) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  //}
+  public boolean isPistonOpen() {
+    if (m_armPiston.get() == DoubleSolenoid.Value.kForward) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   // ================================================================================================== \\
 
   // ==========================================ARM METHODS============================================= \\

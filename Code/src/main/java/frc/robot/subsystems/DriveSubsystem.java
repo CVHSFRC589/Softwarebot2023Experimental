@@ -189,6 +189,54 @@ public class DriveSubsystem extends SubsystemBase {
     // m_rightPIDController.setReference(rightRPM, ControlType.kVelocity,2);
 
   }
+  public void smoothTankDrive(double y, double x) {
+    double xbuffer = x;
+    double ybuffer = y;
+    double fwd;
+    double rot;
+
+    double leftRPM;
+    double rightRPM;
+    // Deadzone checking
+    if (Math.abs(ybuffer) < .1) {
+      ybuffer = 0;
+    }
+
+    if (Math.abs(xbuffer) < .1) {
+      xbuffer = 0;
+    }
+    fwd = ybuffer;
+    rot = xbuffer;
+    percentRMotor = fwd + rot;
+    percentLMotor = fwd - rot;
+
+    if (Math.abs(percentLMotor) > 1) {
+      if (percentLMotor > 0) {
+        percentLMotor = 1;
+      } else {
+        percentLMotor = -1;
+      }
+    }
+
+    if (Math.abs(percentRMotor) > 1) {
+      if (percentRMotor > 0) {
+        percentRMotor = 1;
+      } else {
+        percentRMotor = -1;
+      }
+
+    }
+
+    leftRPM = percentLMotor * Constants.DrivePIDConstants.maxRPM;
+    rightRPM = percentRMotor * Constants.DrivePIDConstants.maxRPM;
+    m_rightPIDController.setReference(rightRPM, ControlType.kSmartVelocity,
+        DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setReference(leftRPM, ControlType.kSmartVelocity,
+        DrivePIDConstants.smartVelocitySlot);
+    // m_leftPIDController.setReference(leftRPM, ControlType.kVelocity,2);
+    // m_rightPIDController.setReference(rightRPM, ControlType.kVelocity,2);
+
+  }
 
   public void setPIDMode() {
     resetMotors();

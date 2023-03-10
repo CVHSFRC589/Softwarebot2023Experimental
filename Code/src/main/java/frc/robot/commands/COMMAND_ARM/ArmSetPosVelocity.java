@@ -27,12 +27,21 @@ public class ArmSetPosVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_degrees < m_arm.getEncoderDeg()) {
-      m_arm.setVelocityArm(-1000);
-    } else {
-      m_arm.setVelocityArm(1000);
+
+    // if ((m_arm.getEncoderDeg() <= m_degrees + 5 &&
+    //     m_arm.getEncoderDeg() >= m_degrees - 5)) {//&&
+    //     //m_arm.isPistonOpen()) {
+    //       m_arm.setArmPosition(m_degrees);
+    // } else {
+      if (m_degrees < m_arm.getEncoderDeg()) {
+        m_arm.setVelocityArm(-1000);
+      } else {
+        m_arm.setVelocityArm(1000);
+      }
     }
-  }
+    // }
+
+    
 
   // Called once the command ends or is interrupted.
   @Override
@@ -43,6 +52,7 @@ public class ArmSetPosVelocity extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // return false;
     if ((m_arm.getEncoderDeg() <= m_degrees + .5 &&
         m_arm.getEncoderDeg() >= m_degrees - .5)) {//&&
         //m_arm.isPistonOpen()) {
