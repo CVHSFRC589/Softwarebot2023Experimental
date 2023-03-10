@@ -65,7 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-  
+
     m_leftMotor = new CANSparkMax(IDConstants.kLeftMotorPort, MotorType.kBrushless);
     m_rightMotor = new CANSparkMax(IDConstants.kRightMotorPort, MotorType.kBrushless);
     m_leftMotor2 = new CANSparkMax(IDConstants.kLeftMotorPort2, MotorType.kBrushless);
@@ -91,8 +91,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setIdleMode(IdleMode.kBrake);
     m_leftMotor.setInverted(false);
     m_rightMotor.setInverted(true);
-    m_leftEncoder.setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
-    m_rightEncoder.setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
+    m_leftEncoder
+        .setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
+    m_rightEncoder
+        .setPositionConversionFactor(PhysicalConstants.DRIVE_WHEEL_CIRCUM / PhysicalConstants.DRIVE_GEAR_RATIO);
 
     m_driveType = () -> false;
     // m_leftMotor.setOpenLoopRampRate(.35);
@@ -106,7 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_table = NetworkTableInstance.getDefault().getTable(LEDConstants.NETWORK_TABLE_NAME);
     m_patternOver = m_table.getEntry(LEDConstants.PATTERN_FINISHED_ENTRY_NAME);
     m_pattern = m_table.getEntry(LEDConstants.VISUAL_FEEDBACK_TABLE_ENTRY_NAME);
-  
+
   }
 
   /**
@@ -139,56 +141,55 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setSafetyEnabled(check);
   }
 
-  // public void smoothDrive(double y, double x){
-  // double xbuffer = x;
-  // double ybuffer = y;
-  // double fwd;
-  // double rot;
+  public void smoothDrive(double y, double x) {
+    double xbuffer = x;
+    double ybuffer = y;
+    double fwd;
+    double rot;
 
-  // double leftRPM;
-  // double rightRPM;
-  // //Deadzone checking
-  // if(Math.abs(ybuffer)<.1){
-  // ybuffer = 0;
-  // }
+    double leftRPM;
+    double rightRPM;
+    // Deadzone checking
+    if (Math.abs(ybuffer) < .1) {
+      ybuffer = 0;
+    }
 
-  // if(Math.abs(xbuffer)<.1){
-  // xbuffer = 0;
-  // }
-  // fwd = ybuffer;
-  // rot = xbuffer;
-  // percentRMotor = fwd+rot;
-  // percentLMotor = fwd-rot;
+    if (Math.abs(xbuffer) < .1) {
+      xbuffer = 0;
+    }
+    fwd = ybuffer;
+    rot = xbuffer;
+    percentRMotor = fwd + rot;
+    percentLMotor = fwd - rot;
 
-  // if(Math.abs(percentLMotor)>1){
-  // if(percentLMotor>0){
-  // percentLMotor = 1;
-  // }
-  // else{
-  // percentLMotor = -1;
-  // }
-  // }
+    if (Math.abs(percentLMotor) > 1) {
+      if (percentLMotor > 0) {
+        percentLMotor = 1;
+      } else {
+        percentLMotor = -1;
+      }
+    }
 
-  // if(Math.abs(percentRMotor)>1){
-  // if(percentRMotor>0){
-  // percentRMotor = 1;
-  // }
-  // else{
-  // percentRMotor = -1;
-  // }
+    if (Math.abs(percentRMotor) > 1) {
+      if (percentRMotor > 0) {
+        percentRMotor = 1;
+      } else {
+        percentRMotor = -1;
+      }
 
-  // }
+    }
 
-  // leftRPM = percentLMotor*Constants.DrivePIDConstants.maxRPM;
-  // rightRPM = percentRMotor*Constants.DrivePIDConstants.maxRPM;
-  // m_rightPIDController.setReference(rightRPM, ControlType.kSmartVelocity,
-  // DrivePIDConstants.smartVelocitySlot);
-  // m_leftPIDController.setReference(leftRPM, ControlType.kSmartVelocity,
-  // DrivePIDConstants.smartVelocitySlot);
-  // // m_leftPIDController.setReference(leftRPM, ControlType.kVelocity,2);
-  // // m_rightPIDController.setReference(rightRPM, ControlType.kVelocity,2);
+    leftRPM = percentLMotor * Constants.DrivePIDConstants.maxRPM;
+    rightRPM = percentRMotor * Constants.DrivePIDConstants.maxRPM;
+    m_rightPIDController.setReference(rightRPM, ControlType.kSmartVelocity,
+        DrivePIDConstants.smartVelocitySlot);
+    m_leftPIDController.setReference(leftRPM, ControlType.kSmartVelocity,
+        DrivePIDConstants.smartVelocitySlot);
+    // m_leftPIDController.setReference(leftRPM, ControlType.kVelocity,2);
+    // m_rightPIDController.setReference(rightRPM, ControlType.kVelocity,2);
 
-  // }
+  }
+
   public void setPIDMode() {
     resetMotors();
     // true means it is in pid mode, false is in normal drive
