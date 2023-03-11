@@ -34,9 +34,9 @@ public class ArmSetPosVelocity extends CommandBase {
     //       m_arm.setArmPosition(m_degrees);
     // } else {
       if (m_degrees < m_arm.getEncoderDeg()) {
-        m_arm.setVelocityArm(-1000);
+        m_arm.setVelocityArm(-2000);
       } else {
-        m_arm.setVelocityArm(1000);
+        m_arm.setVelocityArm(2000);
       }
     }
     // }

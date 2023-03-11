@@ -6,8 +6,10 @@ package frc.robot.commands.Auto_Pattern;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmPhysicalConstants;
+import frc.robot.commands.COMMAND_ARM.ArmInWristIn;
 import frc.robot.commands.COMMAND_ARM.ArmSetPosVelocity;
 import frc.robot.commands.COMMAND_ARM.ArmZeroEncoder;
+import frc.robot.commands.COMMAND_ARM.WristUpArmUp;
 import frc.robot.commands.COMMAND_DRIVE.DriveDistance;
 import frc.robot.commands.COMMAND_DRIVE.PIDLockInPlace;
 import frc.robot.commands.COMMAND_DRIVE.PigeonBalanceSmartVelocity;
@@ -19,6 +21,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -33,23 +36,29 @@ public class ScoreLevel2AndBalanceBackwards extends SequentialCommandGroup {
       //SCORE THREE CUBE
       new ArmZeroEncoder(arm),
       new CloseGripper(grip),
-      new WristSetSpeedTime(wrist, () -> -0.5, 1),
-      new ArmSetPosVelocity(arm, ArmPhysicalConstants.level2),
-      new DriveDistance(24, 0.5, drive),
+      // new WristSetSpeedTime(wrist, () -> -0.5, 1),
+      // new ArmSetPosVelocity(arm, ArmPhysicalConstants.level2),
+      new WristUpArmUp(wrist, arm),
       new WristSetSpeedTime(wrist, () -> 0.5, 1.5),
-      new Pause(0.5),
+      new WaitCommand(0.15),
       new OpenGripper(grip),
-      new Pause(1),
-      new DriveDistance(24, -0.5, drive),
-      new WristSetSpeedTime(wrist, () -> -0.5, 1),
-      new ArmSetPosVelocity(arm, 0),
+      // new WaitCommand(.1),
+      new DriveDistance(14, -0.5, drive),
 
+      // new WristSetSpeedTime(wrist, () -> -0.5, 1),
+      // new ArmSetPosVelocity(arm, 0),
+      new ArmInWristIn(wrist, arm),
+      new WaitCommand(.15),
       //BALANCE BACKWARDS
 
-      new DriveDistance(40, -0.77, drive),
+      new DriveDistance(40, -0.6, drive),
       
-      new DriveDistance(40, -0.5, drive),
-      new Pause(1),
+      new DriveDistance(50, -0.4, drive),
+
+      new DriveDistance(20, -0.4, drive),
+      // new DriveDistance(10, -0.3, drive),
+      new WaitCommand(.25),
+      new DriveDistance(55, 0.6 , drive),
       new PigeonBalanceSmartVelocity(drive),
       new PIDLockInPlace(drive, 0)
     );

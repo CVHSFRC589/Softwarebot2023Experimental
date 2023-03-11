@@ -28,8 +28,8 @@ public class CameraSubsystem extends SubsystemBase {
 
     // m_driverCamera.setResolution(640, 480);
     // m_floorCamera.setResolution(640, 480);
-    // m_driverCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    // m_floorCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);    
+    m_driverCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    m_floorCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);    
 
     m_bsource = true;
     m_mjpegServer = new MjpegServer("Camera Server", 1181);
