@@ -446,9 +446,30 @@ public class DriveSubsystem extends SubsystemBase {
         DrivePIDConstants.smartMotionSlot);
     processVariableRight = m_rightEncoder.getPosition();
   }
-
+  public double leftmotor1getMotorTemperature(){
+    return m_leftMotor.getMotorTemperature();
+  }
+  public double rightmotor1getMotorTemperature(){
+    return m_rightMotor.getMotorTemperature();
+  }
+  public double leftmotor2getMotorTemperature(){
+    return m_leftMotor2.getMotorTemperature();
+  }
+  public double rightmotor2getMotorTemperature(){
+    return m_rightMotor2.getMotorTemperature();
+  }
   @Override
   public void periodic() {
+    
+    // double temperature = m_leftMotor.getMotorTemperature();
+
+    
+    // SmartDashboard.putNumber("Motor Temperature", temperature);
+    SmartDashboard.putNumber("Left motor 1 temp", m_leftMotor.getMotorTemperature());
+    SmartDashboard.putNumber("Left motor 2 temp", leftmotor2getMotorTemperature());
+    SmartDashboard.putNumber("right motor 1 temp", rightmotor1getMotorTemperature());
+    SmartDashboard.putNumber("right motor 2 temp", rightmotor2getMotorTemperature());
+
     SmartDashboard.putNumber("Encoder Abs Avg", getAbsAverageEncoderDistance());
     SmartDashboard.putNumber("Dist From Wall", getRangeFinderDistance());
     SmartDashboard.putNumber("DRIVE SPEED", m_maxoutput);

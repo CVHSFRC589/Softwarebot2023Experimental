@@ -199,6 +199,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("ARM PISTON OUT", getPistonValue().equals(DoubleSolenoid.Value.kForward));
     SmartDashboard.putNumber("Arm Encoder Position", getEncoderInches());
     SmartDashboard.putNumber("Current Position", m_currentPosition);
     SmartDashboard.putNumber("Clamped Position", m_clampedPosition);
@@ -210,6 +211,7 @@ public class ArmSubsystem extends SubsystemBase {
     // CHECK IF ARM IS ZEROED ---> SET ZERO
     if (m_lowerlimitswitch.isPressed()) {
       m_encoder.setPosition(0);
+      // m_armPiston.close();
     }
     // SmartDashboard.putData(m_armPiston);
     // This method will be called on ce per scheduler run

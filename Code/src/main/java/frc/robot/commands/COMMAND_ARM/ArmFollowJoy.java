@@ -33,12 +33,16 @@ public class ArmFollowJoy extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_velocity.getAsDouble()>.1){
+      m_arm.openPiston();
+      
+    }
     SmartDashboard.putNumber("Joystick Y velocity", m_velocity.getAsDouble());
     SmartDashboard.putNumber("Joystick slider velocity modifier", m_velocitymodifier.getAsDouble());
-
     double velocity = m_velocity.getAsDouble() * ((m_velocitymodifier.getAsDouble() + 1) ) * 750;
-
     m_arm.setVelocityArm(velocity);
+   
+    
   }
 
   // Called once the command ends or is interrupted.

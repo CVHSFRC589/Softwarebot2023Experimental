@@ -162,11 +162,14 @@ public class RobotContainer {
                 // ZERO ARM ENCODER
                 new JoystickButton(m_operatorJoyStick, 12)
                                 .toggleOnTrue(new ArmZeroEncoder(m_robotArm));
+                // TOGGLE PISTON
+                new JoystickButton(m_operatorJoyStick, 1)
+                                .toggleOnTrue(new ArmTogglePiston(m_robotArm));
                 // LOCK ARM IN PLACE
                 new JoystickButton(m_operatorJoyStick, 2)
                                 .toggleOnTrue(new ArmPIDLock(m_robotArm));
                 // LEVEL MIN
-                new JoystickButton(m_operatorJoyStick, 1)
+                new JoystickButton(m_operatorJoyStick, 8)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, 0));
                 // LEVEL MAX
                 new JoystickButton(m_operatorJoyStick, 3)
@@ -178,9 +181,6 @@ public class RobotContainer {
                 new JoystickButton(m_operatorJoyStick, 5)
                                 .toggleOnTrue(new ArmSetPosVelocity(m_robotArm, ArmPhysicalConstants.levelportal));
 
-                // TOGGLE PISTON
-                // new JoystickButton(m_operatorJoyStick, 8)
-                //                 .toggleOnTrue(new ArmTogglePiston(m_robotArm));
                 // WRIST UP
                 new JoystickButton(m_operatorJoyStick, 9)
                                 .whileTrue(new WristSetSpeed(m_wrist, () -> -0.5));
