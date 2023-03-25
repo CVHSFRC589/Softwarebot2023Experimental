@@ -45,7 +45,7 @@ public class ScoreLevel2NoTaxi extends SequentialCommandGroup {
       new WristSetSpeedTime(wrist, () -> 0.5, 1.5),
       new WaitCommand(0.25),
       new OpenGripper(grip),
-      // new WaitCommand(.1),
+      new WaitCommand(.25),
       new DriveDistance(14, -0.5, drive),
       new CloseGripper(grip),
 
@@ -53,11 +53,11 @@ public class ScoreLevel2NoTaxi extends SequentialCommandGroup {
       // new WristSetSpeedTime(wrist, () -> -0.5, 1),
       // new ArmSetPosVelocity(arm, 0),
       new ArmInWristIn(wrist, arm),
-      new WaitCommand(.15),
+      new WaitCommand(0.75),
       new ArmExtendPiston(arm),
       //BALANCE BACKWARDS
 
-      new DriveDistance(90, -0.6, drive),
+      new DriveDistance(70, -0.6, drive),
       new PigeonBalanceSmartVelocity(drive),
       new PIDLockInPlace(drive, 0)
     );

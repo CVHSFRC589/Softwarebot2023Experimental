@@ -98,15 +98,15 @@ public class RobotContainer {
 
                 // m_driveChooser.setDefaultOption("Tank", m_setTank);
                 // m_driveChooser.addOption("Arcade", m_setArcade);
-                m_autoChooser.setDefaultOption("Drive out and Balance", m_defaultAuto);
+                m_autoChooser.addOption("Drive out and Balance", m_defaultAuto);
                 m_autoChooser.addOption("Leave Community", new LeaveCommunity(m_robotDrive));
                 m_autoChooser.addOption("Score level 3 Cube", new Score3Cube(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.addOption("Outside Leave Community and balance", new LeaveCommunityAndBalance(m_robotDrive));
                 m_autoChooser.addOption("Auto Balance", new AutoBalance(m_robotDrive));
-                m_autoChooser.addOption("Score Level 2 + Balance Backwards", new ScoreLevel2AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
-                m_autoChooser.addOption("Score Level 1 + Balance Backwards", new ScoreLevel1AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
-                m_autoChooser.addOption("Score Level 2 CUBE WORKING", new Score2(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
-                m_autoChooser.addOption("Score Level 2 CUBE WORKING", new ScoreLevel2NoTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.addOption("Score Level 2 + Balance Backwards + TAXI", new ScoreLevel2AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.addOption("Score Level 1 + Balance Backwards+ TAXI", new ScoreLevel1AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.addOption("Score Level 2 CUBE WORKING ", new Score2(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.setDefaultOption("Score Level 2 Cube + Balance Backwards (NO TAXI)", new ScoreLevel2NoTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
 
 
                 m_autoChooser.addOption("NOTHING", new NOTHING());
