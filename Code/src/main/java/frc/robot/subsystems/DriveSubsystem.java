@@ -345,11 +345,11 @@ public class DriveSubsystem extends SubsystemBase {
     // voltage_scale_factor allows us to compensate for differences in supply
     // voltage.
 
-    double voltage_scale_factor = 1;// 5/RobotController.getVoltage5V();
+    double voltage_scale_factor = 5;// 5/RobotController.getVoltage5V();
 
     double currentDistanceInches = rawValue * voltage_scale_factor * 0.0492;
 
-    return currentDistanceInches;
+    return rawValue/7.73;
 
   }
 

@@ -24,8 +24,8 @@ public final class Constants {
     public static final int kGripperForward = 1;//1
     public static final int kGripperReverse = 0;//0
 
-    public static final int kPistonForward = 3;
-    public static final int kPistonReverse = 2;
+    public static final int kPistonForward = 2;
+    public static final int kPistonReverse = 3;
 
     public static final int kArmMotorPort = 50;// 12;//50
 

@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreLevel2AndBalanceBackwards extends SequentialCommandGroup {
+public class ScoreLevel1AndBalanceBackwards extends SequentialCommandGroup {
   /** Creates a new Score3Cube. */
-  public ScoreLevel2AndBalanceBackwards(ArmSubsystem arm, DriveSubsystem drive, GripperSubsystem grip, WristSubsystem wrist) {
+  public ScoreLevel1AndBalanceBackwards(ArmSubsystem arm, DriveSubsystem drive, GripperSubsystem grip, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -41,10 +41,11 @@ public class ScoreLevel2AndBalanceBackwards extends SequentialCommandGroup {
       new ArmRetractPiston(arm),
       // new WristSetSpeedTime(wrist, () -> -0.5, 1),
       // new ArmSetPosVelocity(arm, ArmPhysicalConstants.level2),
-      new WristUpArmUp(wrist, arm, ArmPhysicalConstants.level2),
+      new WristUpArmUp(wrist, arm, ArmPhysicalConstants.level1),
       new WristSetSpeedTime(wrist, () -> 0.5, 1.5),
       new WaitCommand(0.25),
       new OpenGripper(grip),
+      new WaitCommand(0.5),
       // new WaitCommand(.1),
       new DriveDistance(14, -0.5, drive),
       new CloseGripper(grip),
@@ -57,12 +58,12 @@ public class ScoreLevel2AndBalanceBackwards extends SequentialCommandGroup {
       new ArmExtendPiston(arm),
       //BALANCE BACKWARDS
 
-      new DriveDistance(88, -0.6, drive),
+      new DriveDistance(90, -0.65, drive),
       
-      new DriveDistance(32, -0.4, drive),
+      new DriveDistance(33, -0.5, drive),
       // new DriveDistance(10, -0.3, drive),
       new WaitCommand(.15),
-      new DriveDistance(72, 0.6, drive),
+      new DriveDistance(70, 0.6, drive),
       new PigeonBalanceSmartVelocity(drive),
       new PIDLockInPlace(drive, 0)
     );

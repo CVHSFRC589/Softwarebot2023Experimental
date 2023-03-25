@@ -79,7 +79,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_lowerlimitswitch.enableLimitSwitch(true);
 
   }
-  // ==========================================SENSOR METHODS========================================== \\
+  // ==========================================SENSOR
+  // METHODS========================================== \\
 
   public double getEncoderDeg() {
     return m_encoder.getPosition() * 360;
@@ -114,23 +115,27 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
   }
-  // ================================================================================================== \\
+  // ==================================================================================================
+  // \\
 
-  // ==========================================PISTON METHODS========================================== \\
+  // ==========================================PISTON
+  // METHODS========================================== \\
 
   public void togglePistonSolenoids() {
     if (getPistonValue().equals(DoubleSolenoid.Value.kForward))
-      openPiston();
+      extendPiston();
     else
-      closePiston();
+      retractPiston();
   }
 
-  public void openPiston() {
-    m_armPiston.set(DoubleSolenoid.Value.kReverse);
+  public void extendPiston() {
+    if (getEncoderDeg() < 15) {
+      m_armPiston.set(DoubleSolenoid.Value.kReverse);
+    }
 
   }
 
-  public void closePiston() {
+  public void retractPiston() {
     m_armPiston.set(DoubleSolenoid.Value.kForward);
 
   }
@@ -146,9 +151,11 @@ public class ArmSubsystem extends SubsystemBase {
       return false;
     }
   }
-  // ================================================================================================== \\
+  // ==================================================================================================
+  // \\
 
-  // ==========================================ARM METHODS============================================= \\
+  // ==========================================ARM
+  // METHODS============================================= \\
 
   public double clampValue(double x) {
     if (x > ArmPhysicalConstants.maxArmValue) {
@@ -195,7 +202,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_fixedposition = false;
   }
 
-  // ================================================================================================== \\
+  // ==================================================================================================
+  // \\
 
   @Override
   public void periodic() {
@@ -211,7 +219,7 @@ public class ArmSubsystem extends SubsystemBase {
     // CHECK IF ARM IS ZEROED ---> SET ZERO
     if (m_lowerlimitswitch.isPressed()) {
       m_encoder.setPosition(0);
-      // m_armPiston.close();
+      m_armPiston.close();
     }
     // SmartDashboard.putData(m_armPiston);
     // This method will be called on ce per scheduler run

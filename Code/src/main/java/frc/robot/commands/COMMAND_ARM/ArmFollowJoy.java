@@ -34,7 +34,7 @@ public class ArmFollowJoy extends CommandBase {
   @Override
   public void execute() {
     if(m_velocity.getAsDouble()>.1){
-      m_arm.openPiston();
+      m_arm.retractPiston();
       
     }
     SmartDashboard.putNumber("Joystick Y velocity", m_velocity.getAsDouble());

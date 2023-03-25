@@ -15,12 +15,12 @@ import frc.robot.subsystems.WristSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class WristUpArmUp extends ParallelCommandGroup {
   /** Creates a new WristUpArmUp. */
-  public WristUpArmUp(WristSubsystem wrist, ArmSubsystem arm) {
+  public WristUpArmUp(WristSubsystem wrist, ArmSubsystem arm, double deg) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WristSetSpeedTime(wrist, () -> -0.5, 1),
-      new ArmSetPosVelocity(arm, ArmPhysicalConstants.level2)
+      new ArmSetPosVelocity(arm, deg)
     );
   }
 }
