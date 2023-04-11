@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreLevel2ThenTaxi extends SequentialCommandGroup {
+public class ScoreLevel1NoTaxi extends SequentialCommandGroup {
   /** Creates a new Score3Cube. */
-  public ScoreLevel2ThenTaxi(ArmSubsystem arm, DriveSubsystem drive, GripperSubsystem grip, WristSubsystem wrist) {
+  public ScoreLevel1NoTaxi(ArmSubsystem arm, DriveSubsystem drive, GripperSubsystem grip, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
@@ -41,7 +41,7 @@ public class ScoreLevel2ThenTaxi extends SequentialCommandGroup {
       new ArmRetractPiston(arm),
       // new WristSetSpeedTime(wrist, () -> -0.5, 1),
       // new ArmSetPosVelocity(arm, ArmPhysicalConstants.level2),
-      new WristUpArmUp(wrist, arm, ArmPhysicalConstants.level2),
+      new WristUpArmUp(wrist, arm, ArmPhysicalConstants.level1),
       new WristSetSpeedTime(wrist, () -> 0.5, 1.5),
       new WaitCommand(0.25),
       new OpenGripper(grip),
@@ -57,8 +57,9 @@ public class ScoreLevel2ThenTaxi extends SequentialCommandGroup {
       new ArmExtendPiston(arm),
       //BALANCE BACKWARDS
 
-      new DriveDistance(135, -0.6, drive)
-      
+      new DriveDistance(70, -0.6, drive),
+      new PigeonBalanceSmartVelocity(drive),
+      new PIDLockInPlace(drive, 0)
     );
   }
 }

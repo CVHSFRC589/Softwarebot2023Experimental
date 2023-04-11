@@ -52,7 +52,7 @@ public class ScoreLevel1ThenTaxi extends SequentialCommandGroup {
       //TAXI
       
 
-      new DriveDistance(200, -0.5, drive)
+      new DriveDistance(135, -0.5, drive)
       
     );
   }

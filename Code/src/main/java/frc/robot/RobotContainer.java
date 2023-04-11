@@ -107,6 +107,7 @@ public class RobotContainer {
                 m_autoChooser.addOption("Score Level 1 + Balance Backwards+ TAXI", new ScoreLevel1AndBalanceBackwards(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.addOption("Score Level 2 CUBE WORKING ", new Score2(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.setDefaultOption("Score Level 2 Cube + Balance Backwards (NO TAXI)", new ScoreLevel2NoTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
+                m_autoChooser.addOption("Score Level 1 Cube + Balance Backwards (NO TAXI)", new ScoreLevel1NoTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.addOption("Score Level 2 Cube + AND TAXI OUT (NO BALANCE)", new ScoreLevel2ThenTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
                 m_autoChooser.addOption("Score Level 1 Cube + AND TAXI OUT (NO BALANCE)", new ScoreLevel1ThenTaxi(m_robotArm, m_robotDrive, m_robotGripper, m_wrist));
 
